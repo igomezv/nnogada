@@ -22,19 +22,17 @@ class NeuralNet:
         self.batch_size = kwargs.pop('batch_size', 4)
         self.early_tol = kwargs.pop('early_tol', 100)
         psplit = kwargs.pop('psplit', 0.8)
-        
-    
-        ntrain = int(psplit* len(X))
+
+        ntrain = int(psplit * len(X))
         indx = [ntrain]
         shuffle = np.random.permutation(len(X))
         X = X[shuffle]
         Y = Y[shuffle]
         self.X_train, self.X_test = np.split(X, indx)
-        self.Y_train, self.Y_test = np.split(Y, indx) 
-        
+        self.Y_train, self.Y_test = np.split(Y, indx)
+
         self.model = self.model()
         self.model.summary()
-        
 
     def model(self):
         # Red neuronal
@@ -44,15 +42,14 @@ class NeuralNet:
         for i, nodes in enumerate(self.topology):
             if i == 0:
                 model.add(K.layers.Dense(self.topology[1], input_dim=self.topology[0], activation='relu'))
-            elif i < len(self.topology)-2:
-                model.add(K.layers.Dense(self.topology[i+1], activation='relu'))
+            elif i < len(self.topology) - 2:
+                model.add(K.layers.Dense(self.topology[i + 1], activation='relu'))
             else:
                 model.add(K.layers.Dense(self.topology[i], activation='linear'))
         optimizer = K.optimizers.Adam(learning_rate=self.learning_rate)
         model.compile(optimizer=optimizer, loss='mean_squared_error')
-        
-        return model                    
-    
+
+        return model
 
     def train(self):
         print("Training...")
@@ -64,27 +61,27 @@ class NeuralNet:
                                       verbose=1)
         print("Training complete!")
         return self.history
-    
 
     def get_w_and_b(self, nlayer):
         weights, biases = self.model.layers[nlayer].get_weights()
         return weights, biases
-    
 
-    def save_model(self):
-        pass
-
+    def save_model(self, filename, path=None):
+        if path:
+            self.model.save(filename + '.h5')
+        else:
+            self.model.save(path+filename + '.h5')
 
     def predict(self, x):
         if type(x) == type([1]):
             x = np.array(x)
         if type(x) == type(1):
             x = np.array([x])
-        
+
         prediction = self.model.predict(x)
-        
+
         return prediction
-        
+
     def plot(self, ylogscale=False):
         plt.plot(self.history.history['loss'], label='training set')
         plt.plot(self.history.history['val_loss'], label='validation set')
@@ -96,5 +93,3 @@ class NeuralNet:
         plt.xlabel('epoch')
         plt.legend(['train', 'val'], loc='upper left')
         plt.show()
-        
-
