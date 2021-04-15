@@ -1,7 +1,6 @@
 import tensorflow.keras as K
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
 
 
 class NeuralNet:
@@ -42,9 +41,9 @@ class NeuralNet:
         for i, nodes in enumerate(self.topology):
             if i == 0:
                 model.add(K.layers.Dense(self.topology[1], input_dim=self.topology[0], activation='relu'))
-            elif i < len(self.topology) - 2:
-                model.add(K.layers.Dense(self.topology[i + 1], activation='relu'))
-            else:
+            elif 1 < i < len(self.topology) - 1:
+                model.add(K.layers.Dense(self.topology[i], activation='relu'))
+            elif i == len(self.topology)-1:
                 model.add(K.layers.Dense(self.topology[i], activation='linear'))
         optimizer = K.optimizers.Adam(learning_rate=self.learning_rate)
         model.compile(optimizer=optimizer, loss='mean_squared_error')
