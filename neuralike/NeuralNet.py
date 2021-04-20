@@ -27,13 +27,14 @@ class NeuralNet:
         self.model_path = model_path
         self.topology = topology
         self.epochs = kwargs.pop('epochs', 50)
-        self.learning_rate = kwargs.pop('learning_rate', 1e-4)
-        self.batch_size = kwargs.pop('batch_size', 4)
+        self.learning_rate = kwargs.pop('learning_rate', 5e-4)
+        self.batch_size = kwargs.pop('batch_size', 32)
         self.early_tol = kwargs.pop('early_tol', 100)
         psplit = kwargs.pop('psplit', 0.8)
 
         if load:
             self.model = self.load_model()
+            self.model.summary()
         else:
             ntrain = int(psplit * len(X))
             indx = [ntrain]
@@ -43,8 +44,6 @@ class NeuralNet:
             self.X_train, self.X_test = np.split(X, indx)
             self.Y_train, self.Y_test = np.split(Y, indx)
             self.model = self.model()
-
-        self.model.summary()
 
     def model(self):
         # Red neuronal
@@ -58,19 +57,25 @@ class NeuralNet:
                 model.add(K.layers.Dense(self.topology[i], activation='relu'))
             elif i == len(self.topology) - 1:
                 model.add(K.layers.Dense(self.topology[i], activation='linear'))
-        optimizer = K.optimizers.Adam(learning_rate=self.learning_rate)
+        # Adam recommendations from arxiv:1412.6980
+        optimizer = K.optimizers.Adam(learning_rate=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
         model.compile(optimizer=optimizer, loss='mean_squared_error')
 
         return model
 
     def train(self):
         print("Training neural network...")
+        callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
+                                                      min_delta=0.0,
+                                                      patience=100,
+                                                      restore_best_weights=True)]
+
         self.history = self.model.fit(self.X_train,
                                       self.Y_train,
                                       validation_data=(self.X_test,
                                                        self.Y_test),
                                       epochs=self.epochs, batch_size=self.batch_size,
-                                      verbose=1)
+                                      verbose=1, callbacks=callbacks)
         print("Training complete!")
         return self.history
 
@@ -80,7 +85,7 @@ class NeuralNet:
 
     def save_model(self, filename):
         self.model.save(filename)
-        print('Model {} saved!'.format(filename))
+        print('Neural net model {} saved!'.format(filename))
 
     def load_model(self):
         neural_model = tf.keras.models.load_model('{}'.format(self.model_path))
@@ -96,7 +101,7 @@ class NeuralNet:
 
         return prediction
 
-    def plot(self, ylogscale=False):
+    def plot(self, save=False, figname=False, ylogscale=False, show=False):
         plt.plot(self.history.history['loss'], label='training set')
         plt.plot(self.history.history['val_loss'], label='validation set')
         if ylogscale:
@@ -106,4 +111,7 @@ class NeuralNet:
         plt.ylabel('loss function')
         plt.xlabel('epoch')
         plt.legend(['train', 'val'], loc='upper left')
-        plt.show()
+        if save and figname:
+            plt.savefig(figname)
+        if show:
+            plt.show()
