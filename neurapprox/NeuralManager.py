@@ -4,11 +4,11 @@ import os
 
 
 class NeuralManager:
-    def __init__(self, loglikelihood, pars_bounds, rootname, ndivsgrid=5, hidden_layers_neurons=None,
+    def __init__(self, function, pars_bounds, rootname, ndivsgrid=5, hidden_layers_neurons=None,
                  epochs=100, plot=True, **kwargs):
         if hidden_layers_neurons is None:
             hidden_layers_neurons = [100, 100, 100]
-        self.loglikelihood = loglikelihood
+        self.function = function
         self.pars_bounds = pars_bounds
         self.ndivsgrid = ndivsgrid
         self.epochs = epochs
@@ -29,7 +29,7 @@ class NeuralManager:
 
 
     def training(self):
-        grid = GridLikes(self.loglikelihood, self.pars_bounds, ndivs=self.ndivsgrid, files_path=self.grid_path)
+        grid = GridLikes(self.function, self.pars_bounds, ndivs=self.ndivsgrid, files_path=self.grid_path)
         samples, likes = grid.make_dataset()
         neural_model = NeuralNet(X=samples, Y=likes, topology=self.topology, epochs=self.epochs,
                                  batch_size=self.batch_size, learrning_rate=self.learning_rate)
