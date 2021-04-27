@@ -1,5 +1,6 @@
 # neurapprox
 
-**neurapprox** is a Python package to generate an approximation to a function with neural networks given a dataset or an analytical function.
+**neurapprox** is a Python package that generates a neural network approximation to an analytic function or an intrinsic data function (given a data set). 
+for analytical functions, or for functions intrinsic to a dataset.
 
 
