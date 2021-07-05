@@ -7,6 +7,6 @@
 --------------------
 TO DO:
 
-- Automatic tunning of neural netowks with genetic algorithms.
-- Read file in NeuralManager
+- Automatic tunning of neural netowks with genetic algorithms (DEAP).
+- Read file in NeuralManager (not analytical function).
 
