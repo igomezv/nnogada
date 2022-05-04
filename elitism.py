@@ -71,7 +71,7 @@ def eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, stats=None,
 def main():
 
     # create initial population (generation 0):
-    population = toolbox.populationCreator(n=POPULATION_SIZE)
+    population = toolbox.population(n=population_size)
 
     # prepare the statistics object:
     stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -83,7 +83,7 @@ def main():
 
     # perform the Genetic Algorithm flow with elitism:
     population, logbook = eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
-                                              ngen=MAX_GENERATIONS, stats=stats, halloffame=hof, verbose=True)
+                                              ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
 
     # print info for best solution found:
     best = hof.items[0]
@@ -103,15 +103,4 @@ def main():
     plt.yscale("log")
     plt.show()
 
-# if __name__ == "__main__":
-#     t = time.time()
-#     main()
-#     print("Tiempo transcurrido:", (time.time()-t)/60, "minutos")
-    
-# helper function for creating random real numbers uniformly distributed within a given range [low, up]
-# it assumes that the range is the same for every dimension
-def randomFloat(low, up):
-    return [random.uniform(l, u) for l, u in zip([low] * DIMENSIONS, [up] * DIMENSIONS)]
-
-def pinino():
-    return print("eeaea")
+print("Elitism succesfully imported")
