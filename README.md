@@ -1,6 +1,8 @@
 # neurapprox
 
 --------------------
+UNDER CONSTRUCTION
+
 **TODO**: Convert all the code in a clean program and call it within the notebooks.
 
 **neurapprox** is a Python package that generates neural network approximations for analytical functions, or functions intrinsic to datase. The hyperparameters tunning are made with genetic algorithms. 
