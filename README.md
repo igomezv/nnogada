@@ -17,10 +17,3 @@ UNDER CONSTRUCTION
 - In data folder we have some data used in tests. 
 
 
---------------------
-
-## TO DO:
-
-- Automatic tunning of neural netowks with genetic algorithms (DEAP). 
-- Read file in NeuralManager (not analytical function).
-
