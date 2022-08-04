@@ -1,15 +1,18 @@
-# import deap
 from deap import base, creator, tools, algorithms
-from bitstring import BitArray
 from elitism import eaSimpleWithElitism
 import numpy as np
 from scipy.stats import bernoulli
 
 class GeneticAlgorithm:
-    def __init__(self, hyp_list, model, train_evaluate):
-        self.hyp_list = hyp_list
+    def __init__(self, hyp_dict, model, X_train, Y_train, X_val, Y_val, epochs):
+        self.hyp_dict = hyp_dict
         self.model = model
-        self.train_evaluate = train_evaluate
+        self.X_train = X_train
+        self.Y_train = Y_train
+        self.X_val = X_val
+        self.Y_val = Y_val
+        self.epochs = epochs
+        self.history = []
 
     def ga_with_elitism(self, population_size, max_generations, gene_length, k):
         # Genetic Algorithm constants:
@@ -75,3 +78,50 @@ class GeneticAlgorithm:
 
         best_population = tools.selBest(population, k=k)
         return best_population
+
+    def train_evaluate(self, ga_individual_solution):
+        from bitstring import BitArray
+        import time
+        import tensorflow as tf
+        _, n_output = int(self.Y_train.shape[1])
+        _, n_input = int(self.X_train.shape[1])
+        t = time.time()
+        t_total = 0
+
+        # Decode GA solution to integer for window_size and num_units
+        deep_layers_bits   = BitArray(ga_individual_solution[0:1])     # (8)
+        num_units_bits     = BitArray(ga_individual_solution[1:2])     # (16)
+        learning_rate_bits = BitArray(ga_individual_solution[2:3])    # (8)
+        # #     batch_size_bits    = BitArray(ga_individual_solution[10:12])   # (4)
+        # #     activation_f_bits  = BitArray(ga_individual_solution[12:13])   # (2)   Solo se consideran las 2 primeras
+
+        deep_layers   = SC_DEEP[deep_layers_bits.uint]
+        num_units     = SC_NUM_UNITS[num_units_bits.uint]
+        learning_rate = SC_LEARNING[learning_rate_bits.uint]
+        #     batch_size   = SC_BATCH[batch_size_bits.uint]
+        #     activation_f  = SC_ACTIVATION[activation_f_bits.uint]
+
+        # Train model and predict on validation set
+        # model = tf.keras.Sequential()
+        self.model.add(tf.keras.layers.Dense(num_units, input_shape=n_input))
+
+        for i in range(deep_layers):
+           self.model.add(tf.keras.layers.Dense(num_units, activation='relu'))
+        #             model.add(keras.layers.Dropout(0.3))
+        self.model.add(tf.keras.layers.Dense(n_output, activation=tf.nn.softmax))
+
+        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+        self.model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["accuracy"])
+        self.model.fit(self.X_train, self.Y_train, epochs=self.epochs, validation_data=(self.X_val, self.Y_val),
+                       # callbacks=my_callbacks,
+                       batch_size=128, shuffle=1, verbose=0)
+
+        loss, score = self.model.evaluate(self.X_val, self.Y_val)
+        t = time.time( ) -t
+        # ss.pop(0)
+        print("Accuracy:", score, ", Elapsed time:", t)
+        print("-------------------------------------------------\n")
+
+        self.history.append([deep_layers, num_units, learning_rate, loss, score, t])
+
+        return loss,

@@ -45,13 +45,10 @@ def eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, stats=None,
 
         # add the best back to population:
         offspring.extend(halloffame.items)
-
         # Update the hall of fame with the generated individuals
         halloffame.update(offspring)
-
         # Replace the current population by the offspring
         population[:] = offspring
-
         # Append the current generation statistics to the logbook
         record = stats.compile(population) if stats else {}
         logbook.record(gen=gen, nevals=len(invalid_ind), **record)
