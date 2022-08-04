@@ -1,12 +1,5 @@
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import pandas as pd
-# import time
-from deap import tools
 from deap import algorithms
-from deap import base, creator, tools
-import random
-import seaborn as sns
+from deap import tools
 
 def eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, stats=None,
              halloffame=None, verbose=__debug__):
@@ -67,40 +60,40 @@ def eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, stats=None,
 
     return population, logbook
 
-# Genetic Algorithm flow:
-def main():
+# # Genetic Algorithm flow:
+# def main():
+#
+#     # create initial population (generation 0):
+#     population = toolbox.population(n=population_size)
+#
+#     # prepare the statistics object:
+#     stats = tools.Statistics(lambda ind: ind.fitness.values)
+#     stats.register("min", np.min)
+#     stats.register("avg", np.mean)
+#
+#     # define the hall-of-fame object:
+#     hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
+#
+#     # perform the Genetic Algorithm flow with elitism:
+#     population, logbook = eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
+#                                               ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
+#
+#     # print info for best solution found:
+#     best = hof.items[0]
+#     print("-- Best Individual = ", best)
+#     print("-- Best Fitness = ", best.fitness.values[0])
+#
+#     # extract statistics:
+#     minFitnessValues, meanFitnessValues = logbook.select("min", "avg")
+#
+#     # plot statistics:
+#     sns.set_style("whitegrid")
+#     plt.plot(minFitnessValues, color='red')
+#     plt.plot(meanFitnessValues, color='green')
+#     plt.xlabel('Generation')
+#     plt.ylabel('Min / Average Fitness')
+#     plt.title('Min and Average fitness over Generations (log scale)')
+#     plt.yscale("log")
+#     plt.show()
 
-    # create initial population (generation 0):
-    population = toolbox.population(n=population_size)
-
-    # prepare the statistics object:
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
-    stats.register("min", np.min)
-    stats.register("avg", np.mean)
-
-    # define the hall-of-fame object:
-    hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
-
-    # perform the Genetic Algorithm flow with elitism:
-    population, logbook = eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
-                                              ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
-
-    # print info for best solution found:
-    best = hof.items[0]
-    print("-- Best Individual = ", best)
-    print("-- Best Fitness = ", best.fitness.values[0])
-
-    # extract statistics:
-    minFitnessValues, meanFitnessValues = logbook.select("min", "avg")
-
-    # plot statistics:
-    sns.set_style("whitegrid")
-    plt.plot(minFitnessValues, color='red')
-    plt.plot(meanFitnessValues, color='green')
-    plt.xlabel('Generation')
-    plt.ylabel('Min / Average Fitness')
-    plt.title('Min and Average fitness over Generations (log scale)')
-    plt.yscale("log")
-    plt.show()
-
-print("Elitism succesfully imported")
+# print("Elitism succesfully imported")

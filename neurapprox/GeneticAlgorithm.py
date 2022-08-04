@@ -1,51 +1,77 @@
 # import deap
 from deap import base, creator, tools, algorithms
 from bitstring import BitArray
-from elitism import eaSimpleWithElitism, main
+from elitism import eaSimpleWithElitism
+import numpy as np
+from scipy.stats import bernoulli
 
 class GeneticAlgorithm:
-    def __init__(self, hyp_list):
+    def __init__(self, hyp_list, model, train_evaluate):
         self.hyp_list = hyp_list
+        self.model = model
+        self.train_evaluate = train_evaluate
 
-    def train_evaluate(self, ga_individual_solution):
-        t = time.time()
-        t_total = 0
+    def ga_with_elitism(self, population_size, max_generations, gene_length, k):
+        # Genetic Algorithm constants:
+        P_CROSSOVER = 0.5  # probability for crossover
+        P_MUTATION = 0.5  # probability for mutating an individual
+        HALL_OF_FAME_SIZE = 1  # Best individuals that pass to the other generation
 
-        # list of bitArrays
-        # Decode GA solution to integer for window_size and num_units
-        list_bits = []
-        for i in range(len(self.hyplist)):
-            list_bits.append(BitArray(ga_individual_solution[i:i+1]))  # (8)
+        # set the random seed:
+        toolbox = base.Toolbox()
 
-        # acá voy
-        deep_layers = SC_DEEP[deep_layers_bits.uint]
-        num_units = SC_NUM_UNITS[num_units_bits.uint]
-        learning_rate = SC_LEARNING[learning_rate_bits.uint]
-        batch_size = SC_BATCH[batch_size_bits.uint]
-        #     activation_f  = SC_ACTIVATION[activation_f_bits.uint]
+        # As we are trying to minimize the RMSE score, that's why using -1.0.
+        # In case, when you want to maximize accuracy for instance, use 1.0
+        creator.create('FitnessMin', base.Fitness, weights=[-1.0])
+        creator.create('Individual', list, fitness=creator.FitnessMin)
 
-        # Train model and predict on validation set
-        model = tf.keras.Sequential()
-        #     model.add(Input(shape=(int(X_train.shape[1]),)))
-        model.add(Dense(int(X_train.shape[1])))
+        # create the individual operator to fill up an Individual instance:
+        toolbox.register('binary', bernoulli.rvs, 0.5)
+        toolbox.register('individual', tools.initRepeat, creator.Individual, toolbox.binary, n=gene_length)
 
-        for i in range(deep_layers):
-            model.add(Dense(num_units, activation='relu'))
-        #             model.add(keras.layers.Dropout(0.3))
-        model.add(Dense(2, activation='linear'))
+        # create the population operator to generate a list of individuals:
+        toolbox.register('population', tools.initRepeat, list, toolbox.individual)
 
-        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
-        model.compile(optimizer=optimizer, loss='mse', metrics=['mean_squared_error'])
-        model.fit(X_train, Y_train, epochs=epochs, validation_data=(X_val, Y_val),
-                  callbacks=my_callbacks, batch_size=batch_size, shuffle=False, verbose=0)
+        # genetic operators:
+        toolbox.register('evaluate', self.train_evaluate)
+        toolbox.register('select', tools.selTournament, tournsize=2)
+        toolbox.register('mutate', tools.mutFlipBit, indpb=0.11)
+        toolbox.register('mate', tools.cxUniform, indpb=0.5)
 
-        loss, score = model.evaluate(X_val, Y_val)
-        t = time.time() - t
-        ss.pop(0)
-        print("Loss:", score, ", Elapsed time:", t)
-        print("-------------------------------------------------\n")
-        #     print(loss, score)
+        # create initial population (generation 0):
+        population = toolbox.population(n=population_size)
 
-        datos.append([deep_layers, num_units, learning_rate, batch_size, loss, score, t])
+        # prepare the statistics object:
+        stats = tools.Statistics(lambda ind: ind.fitness.values)
+        stats.register("min", np.min)
+        stats.register("avg", np.mean)
+        stats.register("max", np.max)
 
-        return loss,
+        # define the hall-of-fame object:
+        hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
+
+        # Genetic Algorithm flow with elitism:
+        population, logbook = eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
+                                                  ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
+
+        # print info for best solution found:
+        best = hof.items[0]
+        print("-- Best Individual = ", best)
+        print("-- Best Fitness = ", best.fitness.values[0])
+
+        # extract statistics:
+        minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
+
+        # plot statistics:
+        # sns.set_style("whitegrid")
+        # plt.plot(minFitnessValues, color='blue', label="Min")
+        # plt.plot(meanFitnessValues, color='green', label="Mean")
+        # plt.plot(maxFitnessValues, color='red', label="Max")
+        # plt.xlabel('Generation');
+        # plt.ylabel('Max / Min / Average Fitness')
+        # plt.legend()
+        # plt.title('Max, Min and Average fitness over Generations')
+        # plt.show()
+
+        best_population = tools.selBest(population, k=k)
+        return best_population
