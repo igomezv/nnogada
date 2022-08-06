@@ -2,8 +2,7 @@ from deap import base, creator, tools, algorithms
 from elitism import eaSimpleWithElitism
 import numpy as np
 from scipy.stats import bernoulli
-
-class GeneticAlgorithm:
+class Neurapprox:
     def __init__(self, hyp_dict, model, X_train, Y_train, X_val, Y_val, epochs):
         self.hyp_dict = hyp_dict
         self.model = model
