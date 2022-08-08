@@ -1,5 +1,6 @@
 
-- `GridLikes class` generate a grid of a parameter space in order to evaluate a likelihood function. 
 - `NeuralNet class` is an adaptative generic neural network model using `keras`.
-- `NeuralManager class` is the driver of the neural network models. 
+- `Neuraprox class` is the main neurapprox class.
+- `Hyperparameterx class` defines the class of hyperparameters.
+- `hyperparameters module` has several instance of the Hyperparameter class.
 
