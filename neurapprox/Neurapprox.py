@@ -66,7 +66,7 @@ class Neurapprox:
         print("Accuracy: {:.5f} Loss: {:.5f} Elapsed time: {:.2f}".format(score, loss, t))
         print("-------------------------------------------------\n")
 
-        results = [hyp for hyp in hyp_vary_list].extend(loss, score, t)
+        results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
         print(results)
         return loss,
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
