@@ -24,6 +24,6 @@ class Hyperparameter:
     #
     # def setBitarray(self, bitarray):
     #     self.bitarray = bitarray
-    #
-    # def setDefault(self, default_val):
-    #     self.default = default_val
+
+    def setVal(self, new_val):
+        self.val = new_val
