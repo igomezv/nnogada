@@ -33,96 +33,41 @@ class Neurapprox:
                 hyp.vary = True
                 hyp.setValues(self.hyp_to_find[hyp.name]) #SC_hyperparameters
 
-
-    # def train_evaluate(self, ga_individual_solution):
-    #     n_output = int(self.Y_train.shape[1])
-    #     n_input = int(self.X_train.shape[1])
-    #     print(n_input)
-    #     t = time.time()
-    #     t_total = 0
-    #     i = 0
-    #     for hyp in all_hyp_list:
-    #         if hyp.vary is True:
-    #             print(i, hyp.name)
-    #             hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
-    #             # hyp.val = hyp.values[hyp.bitarray.uint]
-    #             hyp.setVal(hyp.values[hyp.bitarray.uint])
-    #             print(type(hyp.values), np.shape(hyp.values))
-    #             i += 1
-    #
-    #
-    #     # Train model and predict on validation set
-    #     model = tf.keras.Sequential()
-    #     model.add(tf.keras.layers.Dense(num_units.val, input_shape=n_input))
-    #
-    #     for i in range(deep.val):
-    #         model.add(tf.keras.layers.Dense(num_units.val, activation='relu'))
-    #     #             model.add(keras.layers.Dropout(0.3))
-    #     model.add(tf.keras.layers.Dense(n_output, activation=tf.nn.softmax))
-    #
-    #     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
-    #     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["accuracy"])
-    #     model.fit(self.X_train, self.Y_train, epochs=epochs.val, validation_data=(self.X_val, self.Y_val),
-    #                    # callbacks=my_callbacks,
-    #                    batch_size=batch_size.val, shuffle=1, verbose=0)
-    #
-    #     loss, score = model.evaluate(self.X_val, self.Y_val)
-    #     t = time.time( ) -t
-    #     # ss.pop(0)
-    #     print("Accuracy:", score, ", Elapsed time:", t)
-    #     print("-------------------------------------------------\n")
-    #
-    #     self.history.append([deep.val, num_units.val, batch_size.val, learning_rate.val, loss, score, t])
-    #
-    #     return loss, model
-
     def train_evaluate(self, ga_individual_solution):
         t = time.time()
-        t_total = 0
-        datos = []
-
         # Decode GA solution to integer for window_size and num_units
-        deep_layers_bits = BitArray(ga_individual_solution[0:1])  # (8)
-        num_units_bits = BitArray(ga_individual_solution[1:2])  # (16)
-        learning_rate_bits = BitArray(ga_individual_solution[2:3])  # (8)
-        # #     batch_size_bits    = BitArray(ga_individual_solution[10:12])   # (4)
-        # #     activation_f_bits  = BitArray(ga_individual_solution[12:13])   # (2)   Solo se consideran las 2 primeras
+        i = 0
+        hyp_vary_list = []
+        for hyp in all_hyp_list:
+            if hyp.vary is True:
+                hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
+                hyp.setVal(hyp.values[hyp.bitarray.uint])
+                hyp_vary_list.append(hyp.val)
+                i += 1
 
-        deep_layers_uint = deep.values[deep_layers_bits.uint]
-        # print(deep_layers, np.shape(deep_layers))
-        num_units_uint = num_units.values[num_units_bits.uint]
-        learning_rate_uint = learning_rate.values[learning_rate_bits.uint]
-        #     batch_size   = SC_BATCH[batch_size_bits.uint]
-        #     activation_f  = SC_ACTIVATION[activation_f_bits.uint]
-
-        #     print('\n--------------- Starting trial:', population_size*(max_generations+1)-len(ss), "---------------")
-        print('Deep layers:', deep_layers_uint, ', Number of neurons:', num_units_uint, ", Learning rate:", learning_rate_uint)
-        #     print("-------------------------------------------------")
+        print('Deep layers:', deep.val, ', Number of neurons:', num_units.val, ", Learning rate:", learning_rate.val)
 
         # Train model and predict on validation set
         model = tf.keras.Sequential()
-        # model.add(tf.keras.layers.Input(shape=(int(self.X_train.shape[1]),)))
-        model.add(tf.keras.layers.Dense(num_units_uint, input_shape=(int(self.X_train.shape[1]),)))
+        model.add(tf.keras.layers.Dense(num_units.val, input_shape=(int(self.X_train.shape[1]),)))
 
-        for i in range(deep_layers_uint):
-            model.add(tf.keras.layers.Dense(num_units_uint, activation='relu'))
+        for i in range(deep.val):
+            model.add(tf.keras.layers.Dense(num_units.val, activation='relu'))
         #             model.add(keras.layers.Dropout(0.3))
         model.add(tf.keras.layers.Dense(3, activation=tf.nn.softmax))
 
-        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate_uint, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
         model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["accuracy"])
         model.fit(self.X_train, self.Y_train, epochs=epochs.val, validation_data=(self.X_val, self.Y_val),
                   callbacks=None, batch_size=128, shuffle=1, verbose=0)
 
         loss, score = model.evaluate(self.X_val, self.Y_val)
         t = time.time() - t
-        #     ss.pop(0)
-        print("Accuracy:", score, ", Elapsed time:", t)
+        print("Accuracy: {:.5f} Loss: {:.5f} Elapsed time: {:.2f}".format(score, loss, t))
         print("-------------------------------------------------\n")
-        #     print(loss, score)
 
-        datos.append([deep_layers_uint, num_units_uint, learning_rate_uint, loss, score, t])
-
+        results = [hyp for hyp in hyp_vary_list].extend(loss, score, t)
+        print(results)
         return loss,
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
                             halloffame=None, verbose=__debug__):
