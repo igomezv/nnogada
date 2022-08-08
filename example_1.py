@@ -64,7 +64,7 @@ k = 1                  # num. of finalist individuals
 t = time.time()
 datos = []
 
-hyperparams = {'deep': [1,2], 'num_units': [10, 20]}
+hyperparams = {'deep': [1,2], 'num_units': [10, 20], 'batch_size': [128, 256]}
 net_fit = Neurapprox(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
 net_fit.setHyperparameters()
 
