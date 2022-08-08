@@ -1,5 +1,8 @@
 from deap import base, creator, tools, algorithms
 from scipy.stats import bernoulli
+from bitstring import BitArray
+import time
+import tensorflow as tf
 from neurapprox.hyperparameters import *
 
 class Neurapprox:
@@ -28,54 +31,99 @@ class Neurapprox:
         for hyp in all_hyp_list:
             if hyp.name in self.hyp_to_find:
                 hyp.vary = True
-                hyp.setValues(self.hyp_to_find[hyp.name])
+                hyp.setValues(self.hyp_to_find[hyp.name]) #SC_hyperparameters
 
+
+    # def train_evaluate(self, ga_individual_solution):
+    #     n_output = int(self.Y_train.shape[1])
+    #     n_input = int(self.X_train.shape[1])
+    #     print(n_input)
+    #     t = time.time()
+    #     t_total = 0
+    #     i = 0
+    #     for hyp in all_hyp_list:
+    #         if hyp.vary is True:
+    #             print(i, hyp.name)
+    #             hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
+    #             # hyp.val = hyp.values[hyp.bitarray.uint]
+    #             hyp.setVal(hyp.values[hyp.bitarray.uint])
+    #             print(type(hyp.values), np.shape(hyp.values))
+    #             i += 1
+    #
+    #
+    #     # Train model and predict on validation set
+    #     model = tf.keras.Sequential()
+    #     model.add(tf.keras.layers.Dense(num_units.val, input_shape=n_input))
+    #
+    #     for i in range(deep.val):
+    #         model.add(tf.keras.layers.Dense(num_units.val, activation='relu'))
+    #     #             model.add(keras.layers.Dropout(0.3))
+    #     model.add(tf.keras.layers.Dense(n_output, activation=tf.nn.softmax))
+    #
+    #     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+    #     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["accuracy"])
+    #     model.fit(self.X_train, self.Y_train, epochs=epochs.val, validation_data=(self.X_val, self.Y_val),
+    #                    # callbacks=my_callbacks,
+    #                    batch_size=batch_size.val, shuffle=1, verbose=0)
+    #
+    #     loss, score = model.evaluate(self.X_val, self.Y_val)
+    #     t = time.time( ) -t
+    #     # ss.pop(0)
+    #     print("Accuracy:", score, ", Elapsed time:", t)
+    #     print("-------------------------------------------------\n")
+    #
+    #     self.history.append([deep.val, num_units.val, batch_size.val, learning_rate.val, loss, score, t])
+    #
+    #     return loss, model
 
     def train_evaluate(self, ga_individual_solution):
-        from bitstring import BitArray
-        import time
-        import tensorflow as tf
-        n_output = int(self.Y_train.shape[1])
-        n_input = int(self.X_train.shape[1])
-        print(n_input)
         t = time.time()
         t_total = 0
-        i = 0
-        for hyp in all_hyp_list:
-            if hyp.vary is True:
-                print(i, hyp.name)
-                hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
-                # hyp.val = hyp.values[hyp.bitarray.uint]
-                hyp.setVal(hyp.values[hyp.bitarray.uint])
-                print(type(hyp.values))
-                i += 1
+        datos = []
 
+        # Decode GA solution to integer for window_size and num_units
+        deep_layers_bits = BitArray(ga_individual_solution[0:1])  # (8)
+        num_units_bits = BitArray(ga_individual_solution[1:2])  # (16)
+        learning_rate_bits = BitArray(ga_individual_solution[2:3])  # (8)
+        # #     batch_size_bits    = BitArray(ga_individual_solution[10:12])   # (4)
+        # #     activation_f_bits  = BitArray(ga_individual_solution[12:13])   # (2)   Solo se consideran las 2 primeras
+
+        deep_layers_uint = deep.values[deep_layers_bits.uint]
+        # print(deep_layers, np.shape(deep_layers))
+        num_units_uint = num_units.values[num_units_bits.uint]
+        learning_rate_uint = learning_rate.values[learning_rate_bits.uint]
+        #     batch_size   = SC_BATCH[batch_size_bits.uint]
+        #     activation_f  = SC_ACTIVATION[activation_f_bits.uint]
+
+        #     print('\n--------------- Starting trial:', population_size*(max_generations+1)-len(ss), "---------------")
+        print('Deep layers:', deep_layers_uint, ', Number of neurons:', num_units_uint, ", Learning rate:", learning_rate_uint)
+        #     print("-------------------------------------------------")
 
         # Train model and predict on validation set
         model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Dense(num_units.val, input_shape=n_input))
+        # model.add(tf.keras.layers.Input(shape=(int(self.X_train.shape[1]),)))
+        model.add(tf.keras.layers.Dense(num_units_uint, input_shape=(int(self.X_train.shape[1]),)))
 
-        for i in range(deep.val):
-            model.add(tf.keras.layers.Dense(num_units.val, activation='relu'))
+        for i in range(deep_layers_uint):
+            model.add(tf.keras.layers.Dense(num_units_uint, activation='relu'))
         #             model.add(keras.layers.Dropout(0.3))
-        model.add(tf.keras.layers.Dense(n_output, activation=tf.nn.softmax))
+        model.add(tf.keras.layers.Dense(3, activation=tf.nn.softmax))
 
-        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate_uint, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
         model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["accuracy"])
         model.fit(self.X_train, self.Y_train, epochs=epochs.val, validation_data=(self.X_val, self.Y_val),
-                       # callbacks=my_callbacks,
-                       batch_size=batch_size.val, shuffle=1, verbose=0)
+                  callbacks=None, batch_size=128, shuffle=1, verbose=0)
 
         loss, score = model.evaluate(self.X_val, self.Y_val)
-        t = time.time( ) -t
-        # ss.pop(0)
+        t = time.time() - t
+        #     ss.pop(0)
         print("Accuracy:", score, ", Elapsed time:", t)
         print("-------------------------------------------------\n")
+        #     print(loss, score)
 
-        self.history.append([deep.val, num_units.val, batch_size.val, learning_rate.val, loss, score, t])
+        datos.append([deep_layers_uint, num_units_uint, learning_rate_uint, loss, score, t])
 
-        return loss, model
-
+        return loss,
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
                             halloffame=None, verbose=__debug__):
         """This algorithm is similar to DEAP eaSimple() algorithm, with the modification that
@@ -120,10 +168,13 @@ class Neurapprox:
 
             # add the best back to population:
             offspring.extend(halloffame.items)
+
             # Update the hall of fame with the generated individuals
             halloffame.update(offspring)
+
             # Replace the current population by the offspring
             population[:] = offspring
+
             # Append the current generation statistics to the logbook
             record = stats.compile(population) if stats else {}
             logbook.record(gen=gen, nevals=len(invalid_ind), **record)
@@ -133,6 +184,7 @@ class Neurapprox:
         return population, logbook
 
     def ga_with_elitism(self, population_size, max_generations, gene_length, k):
+
         # Genetic Algorithm constants:
         P_CROSSOVER = 0.5  # probability for crossover
         P_MUTATION = 0.5  # probability for mutating an individual
@@ -173,7 +225,7 @@ class Neurapprox:
 
         # Genetic Algorithm flow with elitism:
         population, logbook = self.eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
-                                                       ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
+                                                  ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
 
         # print info for best solution found:
         best = hof.items[0]
@@ -183,7 +235,7 @@ class Neurapprox:
         # extract statistics:
         minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
 
-        # plot statistics:
+        # # plot statistics:
         # sns.set_style("whitegrid")
         # plt.plot(minFitnessValues, color='blue', label="Min")
         # plt.plot(meanFitnessValues, color='green', label="Mean")
@@ -195,4 +247,5 @@ class Neurapprox:
         # plt.show()
 
         best_population = tools.selBest(population, k=k)
+        return best_population
         return best_population
