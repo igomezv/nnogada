@@ -51,11 +51,6 @@ X_train = scaler.transform(X_train)
 X_test  = scaler.transform(X_test)
 X_val   = scaler.transform(X_val)
 
-
-# SC_DEEP       = np.array([2,3,4])                           # Number of deep layers (8)
-# SC_NUM_UNITS  = np.array([50,100,200]) # Number of fully conected neurons (16)
-# SC_LEARNING   = np.array([1e-5,1e-4,5e-3])
-
 population_size = 11   # max of individuals per generation
 max_generations = 5    # number of generations
 gene_length = 4        # lenght of the gene, depends on how many hiperparameters are tested
@@ -64,11 +59,16 @@ k = 1                  # num. of finalist individuals
 t = time.time()
 datos = []
 
+# Define the hyperparameters for the search
 hyperparams = {'deep': [1,2], 'num_units': [10, 20], 'batch_size': [128, 256]}
+
+# generate a Neurapprox instance
 net_fit = Neurapprox(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
+# Set the possible values of hyperparameters and not use the default values from hyperparameters.py
 net_fit.setHyperparameters()
 
+# best solution
 best_population = net_fit.ga_with_elitism(population_size, max_generations, gene_length, k)
-
+print(best_population)
 print("Total elapsed time:", (time.time()-t)/60, "minutes")
 
