@@ -69,6 +69,7 @@ class Neurapprox:
         # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
         # print(results)
         return loss,
+
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
                             halloffame=None, verbose=__debug__):
         """This algorithm is similar to DEAP eaSimple() algorithm, with the modification that
