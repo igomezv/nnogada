@@ -10,6 +10,7 @@ except:
 
 
 class NeuralNet:
+# Now this class does not work with neurapprox
 
     def __init__(self, load=False, model_path=None, X=None, Y=None, topology=None, **kwargs):
         """

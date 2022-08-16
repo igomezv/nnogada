@@ -16,14 +16,5 @@ class Hyperparameter:
                 values = np.array(values)
         self.values = values
 
-    # def setName(self, name):
-    #     self.name = name
-    #
-    # def setUint(self, uint):
-    #     self.uint = uint
-    #
-    # def setBitarray(self, bitarray):
-    #     self.bitarray = bitarray
-
     def setVal(self, new_val):
         self.val = new_val
