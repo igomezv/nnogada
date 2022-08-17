@@ -1,4 +1,4 @@
-from neurapprox.Hyperparameter import Hyperparameter
+from nnoga.Hyperparameter import Hyperparameter
 import numpy as np
 
 deep = Hyperparameter(name='deep', values=np.array([2, 3, 4]), val=3)

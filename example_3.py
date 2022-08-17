@@ -1,5 +1,5 @@
 import time
-from neurapprox.Neurapprox import Neurapprox
+from nnoga.Nnoga import Nnoga
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import numpy as np
@@ -43,8 +43,8 @@ datos = []
 # Define the hyperparameters for the search
 hyperparams = {'deep': [1, 2], 'num_units': [10, 20], 'batch_size': [128, 256]}
 
-# generate a Neurapprox instance
-net_fit = Neurapprox(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
+# generate a Nnoga instance
+net_fit = Nnoga(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
 # Set the possible values of hyperparameters and not use the default values from hyperparameters.py
 net_fit.set_hyperparameters()
 
