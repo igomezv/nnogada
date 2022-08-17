@@ -38,7 +38,7 @@ t = time.time()
 datos = []
 
 # Define the hyperparameters for the search
-hyperparams = {'deep': [1, 2], 'num_units': [10, 20], 'batch_size': [128, 256]}
+hyperparams = {'deep': [1, 2], 'num_units': [1,2], 'batch_size': [256,1048]}
 
 # generate a Nnogada instance
 net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)

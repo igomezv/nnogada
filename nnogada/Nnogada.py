@@ -215,7 +215,9 @@ class Nnogada:
 
         best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
-        self.history = pd.DataFrame(self.history, columns=self.df_colnames.extend(["loss", "score", "time"]))
+        # print(self.history.head(5))
+        self.df_colnames = self.df_colnames + ['loss', 'score', 't']
+        self.history = pd.DataFrame(self.history, columns=self.df_colnames)
         self.history.sort_values(by='loss', ascending=True)
         print(self.history.head(5))
 
