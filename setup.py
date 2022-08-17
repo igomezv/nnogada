@@ -7,7 +7,7 @@ from setuptools import setup
 with open("README.md", "r") as fh:
     desc = fh.read()
 
-required = ["numpy", "scipy", "sklearn", "tensorflow", "deap"]
+required = ["numpy", "scipy", "sklearn", "tensorflow", "deap", 'bitstring']
 
 setup(
     name="simplemc",
@@ -16,10 +16,10 @@ setup(
     author_email="igomez@icf.unam.mx",
     url="https://github.com/igomezv/neurapporx",
     license="GPLv3",
-    description="Hyperparameter tuning for neural nets",
+    description="Genetic hyperparameter tuning for neural nets",
     long_description=desc,
     install_requires=required,
-    include_package_data=True,
+    include_package_data=False,
     keywords=["Hyperparameter",
               "optimization",
               "machine learning",
