@@ -14,7 +14,7 @@ setup(
     version='0.0.1',    
     author='I Gomez-Vargas',
     author_email="igomez@icf.unam.mx",
-    url="https://github.com/igomezv/neurapprox",
+    url="https://github.com/igomezv/nnoga",
     license="GPLv3",
     description="Genetic hyperparameter tuning for neural nets",
     long_description=desc,
