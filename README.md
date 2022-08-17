@@ -1,6 +1,6 @@
-# Neural Networks Optimized by Neural Networks for Data Analysis (NNOGADA) 
+# Neural Networks Optimized by Genetic Algorithms for Data Analysis (NNOGADA) 
 
-**nnogada** is a Python package that generates neural network approximations for analytical functions, or functions intrinsic to datase. The hyperparameters tunning are made with genetic algorithms. 
+**nnogada** is a Python package that perform a hyperparemeter tuning for artificial neural networks using a simple genetic algorithms. Useful for generate better neural network models for data analysis.
 
 
 ## Description of this repository
