@@ -4,9 +4,9 @@ from bitstring import BitArray
 import time
 import tensorflow as tf
 import pandas as pd
-from nnoga.hyperparameters import *
+from nnogada.hyperparameters import *
 
-class Nnoga:
+class Nnogada:
     def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True,
                  **kwargs):
         self.deep = kwargs.pop('deep', deep)
