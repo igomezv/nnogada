@@ -6,14 +6,20 @@ import tensorflow as tf
 from neurapprox.hyperparameters import *
 
 class Neurapprox:
-    def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True):
-        self.deep = deep
-        self.num_units = num_units
-        self.batch_size = batch_size
-        self.learning_rate = learning_rate
-        self.epochs = epochs
-        self.act_fn = act_fn
-        self.last_act_fn = last_act_fn
+    def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True,
+                 **kwargs):
+        self.deep = kwargs.pop('deep', deep)
+        self.num_units = kwargs.pop('num_units', num_units)
+        self.batch_size = kwargs.pop('batch_size', batch_size)
+        self.learning_rate = kwargs.pop('learning_rate', learning_rate)
+        self.epochs = kwargs.pop('epochs', epochs)
+        self.act_fn = kwargs.pop('act_fn', act_fn)
+        self.last_act_fn = kwargs.pop('last_act_fn', last_act_fn)
+        self.loss_fn = kwargs.pop('loss_fn', loss_fn)
+
+        self.all_hyp_list = [self.deep, self.num_units, self.batch_size, self.learning_rate,
+                             self.epochs, self.act_fn, self.last_act_fn, self.loss_fn]
+
         self.hyp_to_find = hyp_to_find
 
         if regression:
@@ -34,7 +40,7 @@ class Neurapprox:
         dict_hyp:
         {'num_units': [1,2,3], ''}
         """
-        for hyp in all_hyp_list:
+        for hyp in self.all_hyp_list:
             if hyp.name in self.hyp_to_find:
                 hyp.vary = True
                 hyp.setValues(self.hyp_to_find[hyp.name]) #SC_hyperparameters
@@ -44,29 +50,29 @@ class Neurapprox:
         # Decode GA solution to integer for window_size and num_units
         i = 0
         hyp_vary_list = []
-        for hyp in all_hyp_list:
+        for hyp in self.all_hyp_list:
             if hyp.vary is True:
                 hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
                 hyp.setVal(hyp.values[hyp.bitarray.uint])
                 hyp_vary_list.append(hyp.val)
                 i += 1
 
-        print('Deep layers:', deep.val, ', Number of neurons:', num_units.val, ", Learning rate:", learning_rate.val)
+        print('Deep layers:', self.deep.val, ', Number of neurons:', self.num_units.val, ", Learning rate:", self.learning_rate.val)
 
         # Train model and predict on validation set
         model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Dense(num_units.val, input_shape=(int(self.X_train.shape[1]),)))
+        model.add(tf.keras.layers.Dense(self.num_units.val, input_shape=(int(self.X_train.shape[1]),)))
 
-        for i in range(deep.val):
-            model.add(tf.keras.layers.Dense(num_units.val, activation=act_fn.val))
+        for i in range(self.deep.val):
+            model.add(tf.keras.layers.Dense(self.num_units.val, activation=self.act_fn.val))
         #             model.add(keras.layers.Dropout(0.3))
         # model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=tf.nn.softmax))
         model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=self.last_act_fn.val))
 
-        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
-        model.compile(optimizer=optimizer, loss=loss_fn.val, metrics=[self.metric])
-        model.fit(self.X_train, self.Y_train, epochs=epochs.val, validation_data=(self.X_val, self.Y_val),
-                  callbacks=None, batch_size=128, shuffle=1, verbose=0)
+        optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+        model.compile(optimizer=optimizer, loss=self.loss_fn.val, metrics=[self.metric])
+        model.fit(self.X_train, self.Y_train, epochs=self.epochs.val, validation_data=(self.X_val, self.Y_val),
+                  callbacks=None, batch_size=self.batch_size.val, shuffle=1, verbose=0)
 
         loss, score = model.evaluate(self.X_val, self.Y_val)
         t = time.time() - t
