@@ -86,7 +86,7 @@ class Nnogada:
 
         # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
         # print(results)
-        self.history + [loss, score, t]
+        self.history.append(hyp_vary_list+[loss, score, t])
         return loss,
 
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
