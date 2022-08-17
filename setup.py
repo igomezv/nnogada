@@ -11,10 +11,10 @@ required = ["numpy", "scipy", "sklearn", "tensorflow", "deap", 'bitstring']
 
 setup(
     name="simplemc",
-    version='0.0.1',
+    version='0.0.1',    
     author='I Gomez-Vargas',
     author_email="igomez@icf.unam.mx",
-    url="https://github.com/igomezv/neurapporx",
+    url="https://github.com/igomezv/neurapprox",
     license="GPLv3",
     description="Genetic hyperparameter tuning for neural nets",
     long_description=desc,
