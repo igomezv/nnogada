@@ -86,7 +86,7 @@ class Nnogada:
 
         # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
         # print(results)
-        self.history.append(hyp_vary_list.extend([loss, score, t]))
+        self.history + [loss, score, t]
         return loss,
 
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -217,6 +217,7 @@ class Nnogada:
         # convert the history list in a data frame
         # print(self.history.head(5))
         self.df_colnames = self.df_colnames + ['loss', 'score', 't']
+        print(self.df_colnames)
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
         self.history.sort_values(by='loss', ascending=True)
         print(self.history.head(5))
