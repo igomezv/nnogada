@@ -4,9 +4,9 @@ from bitstring import BitArray
 import time
 import tensorflow as tf
 import pandas as pd
-from neurapprox.hyperparameters import *
+from nnoga.hyperparameters import *
 
-class Neurapprox:
+class Nnoga:
     def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True,
                  **kwargs):
         self.deep = kwargs.pop('deep', deep)
@@ -63,7 +63,6 @@ class Neurapprox:
                 self.df_colnames.append(hyp.name)
                 print(hyp.name + ": {} | ".format(hyp.val), end='')
         print("\n-------------------------------------------------")
-        self.history.append(hyp_vary_list)
 
         # Train model and predict on validation set
         model = tf.keras.Sequential()
@@ -87,6 +86,7 @@ class Neurapprox:
 
         # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
         # print(results)
+        self.history.append(hyp_vary_list)
         return loss,
 
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -215,6 +215,6 @@ class Neurapprox:
         best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
-        print(self.history)
+        print(self.history  )
 
         return best_population
