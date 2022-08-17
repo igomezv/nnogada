@@ -1,4 +1,4 @@
-# NNOGA: Neural Networks Optimized by Neural Networks
+# Neural Networks Optimized by Neural Networks (NNOGA) 
 
 **nnoga** is a Python package that generates neural network approximations for analytical functions, or functions intrinsic to datase. The hyperparameters tunning are made with genetic algorithms. 
 
