@@ -55,15 +55,18 @@ class Neurapprox:
         # Decode GA solution to integer for window_size and num_units
         i = 0
         hyp_vary_list = []
+        # df_colnames = []
         for hyp in self.all_hyp_list:
             if hyp.vary:
                 hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
                 hyp.setVal(hyp.values[hyp.bitarray.uint])
                 hyp_vary_list.append(hyp.val)
                 i += 1
+                # df_colnames.append(hyp.name)
+                self.history.loc[i, [hyp.name]]
                 print(hyp.name + ": {} |".format(hyp.val), end='')
         print("\n-------------------------------------------------")
-
+        # self.history.columns = df_colnames
         # Train model and predict on validation set
         model = tf.keras.Sequential()
         model.add(tf.keras.layers.Dense(self.num_units.val, input_shape=(int(self.X_train.shape[1]),)))
@@ -212,4 +215,5 @@ class Neurapprox:
         # plt.show()
 
         best_population = tools.selBest(population, k=k)
+        print(self.history)
         return best_population
