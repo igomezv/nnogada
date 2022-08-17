@@ -219,7 +219,7 @@ class Nnogada:
         self.df_colnames = self.df_colnames + ['loss', 'score', 't']
         print(self.df_colnames)
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
-        self.history.sort_values(by='loss', ascending=True)
+        self.history = self.history.sort_values(by='loss', ascending=True)
         print(self.history.head(5))
 
         return best_population
