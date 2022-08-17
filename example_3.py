@@ -10,22 +10,19 @@ N = len(df.values)
 randomize = np.random.permutation(N)
 data = df.values[randomize]
 N = len(df.values)
-z = data[:,0] 
-y = data[:,1:3] ### coge el resto de variables a predecir 
-y[:,1] = y[:,1]**2+data[:,2]
+z = data[:, 0]
+y = data[:, 1:3] ### toma el resto de variables a predecir
+y[:,1] = y[:, 1]**2+data[:,2]
 np.shape(y)
 
 
-dmag =df["dmb"]
-df2=df['errors']+df['dmb']**2
+dmag = df["dmb"]
+df2 = df['errors']+df['dmb']**2
 
 scalerz = StandardScaler()
-scalerz.fit(z.reshape(-1,1))
-z = scalerz.transform(z.reshape(-1,1))
+scalerz.fit(z.reshape(-1, 1))
+z = scalerz.transform(z.reshape(-1, 1))
 
-
-
-### Modificar para incluir phanteon como test
 split = 0.75
 ntrain = int(split * len(z))
 indx = [ntrain]

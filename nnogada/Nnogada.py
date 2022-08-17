@@ -86,7 +86,7 @@ class Nnogada:
 
         # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
         # print(results)
-        self.history.append(hyp_vary_list)
+        self.history.append(hyp_vary_list.extend([loss, score, t]))
         return loss,
 
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -200,6 +200,7 @@ class Nnogada:
 
         # extract statistics:
         minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
+        print(best.fitness.values)
 
         # # plot statistics:
         # sns.set_style("whitegrid")
@@ -214,7 +215,8 @@ class Nnogada:
 
         best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
-        self.history = pd.DataFrame(self.history, columns=self.df_colnames)
-        print(self.history  )
+        self.history = pd.DataFrame(self.history, columns=self.df_colnames.extend(["loss", "score", "time"]))
+        self.history.sort_values(by='loss', ascending=True)
+        print(self.history.head(5))
 
         return best_population
