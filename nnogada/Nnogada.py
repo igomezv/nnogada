@@ -195,8 +195,8 @@ class Nnogada:
 
         # print info for best solution found:
         best = hof.items[0]
-        print("-- Best Individual = ", best)
-        print("-- Best Fitness = ", best.fitness.values[0])
+        # print("-- Best Individual = ", best)
+        # print("-- Best Fitness = ", best.fitness.values[0])
 
         # extract statistics:
         minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
