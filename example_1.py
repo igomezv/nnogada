@@ -65,7 +65,7 @@ hyperparams = {'deep': [1,2], 'num_units': [10, 20], 'batch_size': [128, 256]}
 # generate a Neurapprox instance
 net_fit = Neurapprox(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
 # Set the possible values of hyperparameters and not use the default values from hyperparameters.py
-net_fit.setHyperparameters()
+net_fit.set_hyperparameters()
 
 # best solution
 best_population = net_fit.ga_with_elitism(population_size, max_generations, gene_length, k)
