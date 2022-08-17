@@ -8,5 +8,7 @@ learning_rate = Hyperparameter(name='learning_rate', values=np.array([1e-2, 1e-3
 epochs = Hyperparameter(name='epochs', values=np.array([50, 100, 200]), val=100)
 act_fn = Hyperparameter(name='act_fn', values=['relu', 'sigmoid', 'tanh'], val='relu')
 last_act_fn = Hyperparameter(name='last_act_fn', values=['relu', 'sigmoid', 'linear'], val='linear')
+loss_fn = Hyperparameter(name='loss_fn', values=['categorical_crossentropy', 'mean_squared_error'], val='mean_squared_error')
 
-all_hyp_list = [deep, num_units, batch_size, learning_rate, epochs, act_fn, last_act_fn]
+all_hyp_list = [deep, num_units, batch_size, learning_rate,
+                epochs, act_fn, last_act_fn, loss_fn]
