@@ -3,6 +3,7 @@ from scipy.stats import bernoulli
 from bitstring import BitArray
 import time
 import tensorflow as tf
+import pandas as pd
 from neurapprox.hyperparameters import *
 
 class Neurapprox:
@@ -33,8 +34,8 @@ class Neurapprox:
         self.Y_train = Y_train
         self.X_val = X_val
         self.Y_val = Y_val
-        self.history = []
 
+        self.history = pd.DataFrame()
     def set_hyperparameters(self):
         """
         dict_hyp:
@@ -46,18 +47,22 @@ class Neurapprox:
                 hyp.setValues(self.hyp_to_find[hyp.name]) #SC_hyperparameters
 
     def train_evaluate(self, ga_individual_solution):
+        """
+        This train and evaluates the neural network models with the different
+        GA individuals.
+        """
         t = time.time()
         # Decode GA solution to integer for window_size and num_units
         i = 0
         hyp_vary_list = []
         for hyp in self.all_hyp_list:
-            if hyp.vary is True:
+            if hyp.vary:
                 hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
                 hyp.setVal(hyp.values[hyp.bitarray.uint])
                 hyp_vary_list.append(hyp.val)
                 i += 1
-
-        print('Deep layers:', self.deep.val, ', Number of neurons:', self.num_units.val, ", Learning rate:", self.learning_rate.val)
+                print(hyp.name + ": {} |".format(hyp.val), end='')
+        print("\n-------------------------------------------------")
 
         # Train model and predict on validation set
         model = tf.keras.Sequential()
