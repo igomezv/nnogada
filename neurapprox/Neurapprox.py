@@ -6,7 +6,7 @@ import tensorflow as tf
 from neurapprox.hyperparameters import *
 
 class Neurapprox:
-    def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val):
+    def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True):
         self.deep = deep
         self.num_units = num_units
         self.batch_size = batch_size
@@ -15,15 +15,21 @@ class Neurapprox:
         self.act_fn = act_fn
         self.last_act_fn = last_act_fn
         self.hyp_to_find = hyp_to_find
-        # hyp_dict keys: name, values (np.array([3,4])),
-        # self.model = model
+
+        if regression:
+            self.metric = 'mean_squared_error'
+        else:
+            # it is a classification problem
+            self.metric = 'accuracy'
+            self.last_act_fn.setVal('softmax')
+
         self.X_train = X_train
         self.Y_train = Y_train
         self.X_val = X_val
         self.Y_val = Y_val
         self.history = []
 
-    def setHyperparameters(self):
+    def set_hyperparameters(self):
         """
         dict_hyp:
         {'num_units': [1,2,3], ''}
@@ -52,12 +58,13 @@ class Neurapprox:
         model.add(tf.keras.layers.Dense(num_units.val, input_shape=(int(self.X_train.shape[1]),)))
 
         for i in range(deep.val):
-            model.add(tf.keras.layers.Dense(num_units.val, activation='relu'))
+            model.add(tf.keras.layers.Dense(num_units.val, activation=act_fn.val))
         #             model.add(keras.layers.Dropout(0.3))
-        model.add(tf.keras.layers.Dense(3, activation=tf.nn.softmax))
+        # model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=tf.nn.softmax))
+        model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=self.last_act_fn.val))
 
         optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
-        model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["accuracy"])
+        model.compile(optimizer=optimizer, loss=loss_fn.val, metrics=[self.metric])
         model.fit(self.X_train, self.Y_train, epochs=epochs.val, validation_data=(self.X_val, self.Y_val),
                   callbacks=None, batch_size=128, shuffle=1, verbose=0)
 
@@ -129,12 +136,13 @@ class Neurapprox:
 
         return population, logbook
 
-    def ga_with_elitism(self, population_size, max_generations, gene_length, k):
+    def ga_with_elitism(self, population_size, max_generations, gene_length, k,
+                        pmutation=0.5, pcrossover=0.5, hof=1):
 
         # Genetic Algorithm constants:
-        P_CROSSOVER = 0.5  # probability for crossover
-        P_MUTATION = 0.5  # probability for mutating an individual
-        HALL_OF_FAME_SIZE = 1  # Best individuals that pass to the other generation
+        P_CROSSOVER = pcrossover  # probability for crossover
+        P_MUTATION = pmutation  # probability for mutating an individual
+        HALL_OF_FAME_SIZE = hof  # Best individuals that pass to the other generation
 
         # set the random seed:
         toolbox = base.Toolbox()
@@ -171,7 +179,7 @@ class Neurapprox:
 
         # Genetic Algorithm flow with elitism:
         population, logbook = self.eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
-                                                  ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
+                                                       ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
 
         # print info for best solution found:
         best = hof.items[0]
@@ -193,5 +201,4 @@ class Neurapprox:
         # plt.show()
 
         best_population = tools.selBest(population, k=k)
-        return best_population
         return best_population
