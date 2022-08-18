@@ -9,6 +9,60 @@ from nnogada.hyperparameters import *
 class Nnogada:
     def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True,
                  **kwargs):
+        """
+        Initialization of Nnogada class.
+
+        Parameters
+        -----------
+        hyp_to_find: dict
+            Dictionary with the free hyperparameters of the neural net. The names must match with the names
+            in the hyperparameters.py file.
+            Ex: hyperparams = {'deep': [2,3], 'num_units': [100, 200], 'batch_size': [8, 32]}
+
+        X_train: numpy.ndarray
+            Set of attributes, or independent variables, for training.
+
+        Y_train: numpy.ndarray
+            Set of labels or dependent variable for training.
+
+        X_val: numpy.ndarray
+            Set of attributes, or independent variables, for testing/validation.
+
+        Y_test: numpy.ndarray
+            Set of labels or dependent variable for testing/validation.
+
+        regression: Boolean
+            If True assumes a regression task. Else, a classification is assumed. It
+            affects the default choice in the activation function for the last layer,
+            if regression it is the linear function, else it is softmax.
+
+        **kwargs
+        --------
+            deep: Hyperparameter object
+                Number of layers.
+
+            num_units: Hyperparameter object
+                Number of nodes by layer.
+
+            batch_size: Hyperparameter object
+                Batch size.
+
+            learning_rate: Hyperparameter object
+                Learning rate for Adam optimizer.
+
+            epochs: Hyperparameter object
+                Number of epochs for training.
+
+            act_fn: Hyperparameter object
+                Activation function for the hidden layers.
+
+            last_act_fn: Hyperparameter object
+                Activation function for the last layer.
+
+            loss_fn: Hyperparameter object
+                Loss function.
+
+        """
         self.deep = kwargs.pop('deep', deep)
         self.num_units = kwargs.pop('num_units', num_units)
         self.batch_size = kwargs.pop('batch_size', batch_size)
@@ -38,18 +92,24 @@ class Nnogada:
         self.history = []
     def set_hyperparameters(self):
         """
-        dict_hyp:
-        {'num_units': [1,2,3], ''}
+        This small routine sets as variable the hyperparameters
+        indicated in the hyp_to_find dictionary.
         """
         for hyp in self.all_hyp_list:
             if hyp.name in self.hyp_to_find:
                 hyp.vary = True
                 hyp.setValues(self.hyp_to_find[hyp.name]) #SC_hyperparameters
 
-    def train_evaluate(self, ga_individual_solution):
+    def neural_train_evaluate(self, ga_individual_solution):
         """
         This train and evaluates the neural network models with the different
-        GA individuals.
+        solutions proposed by the Genetic Algorithm .
+
+        Parameters
+        -----------
+
+        ga_individual_solution:
+            Individual of the genetic algorithm.
         """
         t = time.time()
         # Decode GA solution to integer for window_size and num_units
@@ -91,7 +151,10 @@ class Nnogada:
 
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
                             halloffame=None, verbose=__debug__):
-        """This algorithm is similar to DEAP eaSimple() algorithm, with the modification that
+        """
+        Method from https://github.com/PacktPublishing/Hands-On-Genetic-Algorithms-with-Python.
+
+        This algorithm is similar to DEAP eaSimple() algorithm, with the modification that
         halloffame is used to implement an elitism mechanism. The individuals contained in the
         halloffame are directly injected into the next generation and are not subject to the
         genetic operators of selection, crossover and mutation.
@@ -150,7 +213,34 @@ class Nnogada:
 
     def ga_with_elitism(self, population_size, max_generations, gene_length, k,
                         pmutation=0.5, pcrossover=0.5, hof=1):
+        """
+        Simple genetic algorithm with elitism.
 
+        Parameters:
+        ------------
+
+        population_size: int
+            Population size.
+
+        max_generations: int
+            Maximum number of generations.
+
+        gene_length: int
+            Length of each gene.
+
+        k: int
+            K parameter for the tournament selection method.
+
+        pmutation: float
+            Probability of mutation (0<pmutation<1)
+
+        pcrossover: float
+            Probability of crossover (0<pcrossover<1)
+
+        hof: int
+            Number of individuals to stay in the hall of fame. It determines
+            the elitism performance.
+        """
         # Genetic Algorithm constants:
         P_CROSSOVER = pcrossover  # probability for crossover
         P_MUTATION = pmutation  # probability for mutating an individual
@@ -172,7 +262,7 @@ class Nnogada:
         toolbox.register('population', tools.initRepeat, list, toolbox.individual)
 
         # genetic operators:
-        toolbox.register('evaluate', self.train_evaluate)
+        toolbox.register('evaluate', self.neural_train_evaluate)
         toolbox.register('select', tools.selTournament, tournsize=2)
         toolbox.register('mutate', tools.mutFlipBit, indpb=0.11)
         toolbox.register('mate', tools.cxUniform, indpb=0.5)
