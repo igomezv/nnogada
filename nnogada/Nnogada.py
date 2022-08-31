@@ -117,7 +117,7 @@ class Nnogada:
         self.df_colnames = []
         for i, hyp in enumerate(self.all_hyp_list):
             if hyp.vary:
-                hyp.bitarray = BitArray(ga_individual_solution[i:i+1])  # (8)
+                hyp.bitarray = BitArray(ga_individual_solution[i*2:i*2+2])  # (8)
                 hyp.setVal(hyp.values[hyp.bitarray.uint])
                 hyp_vary_list.append(hyp.val)
                 self.df_colnames.append(hyp.name)

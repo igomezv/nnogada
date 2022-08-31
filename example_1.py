@@ -53,14 +53,14 @@ X_val   = scaler.transform(X_val)
 
 population_size = 11   # max of individuals per generation
 max_generations = 5    # number of generations
-gene_length = 4        # lenght of the gene, depends on how many hiperparameters are tested
+gene_length = 8        # lenght of the gene, depends on how many hiperparameters are tested 2*hyp
 k = 1                  # num. of finalist individuals
 
 t = time.time()
 datos = []
 
 # Define the hyperparameters for the search
-hyperparams = {'deep': [1,2], 'num_units': [10, 20], 'batch_size': [128, 256]}
+hyperparams = {'deep': [1,2,3,4], 'num_units': [1,5,10, 20], 'batch_size': [1,64,128, 256]}
 
 # generate a Nnogada instance
 net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
