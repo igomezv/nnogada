@@ -8,4 +8,7 @@
 - nnogada has the source code of the neural approximator with simple genetic algorithms.
 - In data folder we have some data used in tests. 
 
+## TODO 
 
+- Include convolutional and recurrent neural networks.
+- Allow pytorch models.
