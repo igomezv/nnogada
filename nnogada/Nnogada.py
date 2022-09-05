@@ -1,5 +1,6 @@
 from deap import base, creator, tools, algorithms
 from scipy.stats import bernoulli
+import sys
 from bitstring import BitArray
 import time
 import tensorflow as tf
@@ -117,7 +118,18 @@ class Nnogada:
         self.df_colnames = []
         for i, hyp in enumerate(self.all_hyp_list):
             if hyp.vary:
-                hyp.bitarray = BitArray(ga_individual_solution[i*2:i*2+2])  # (8)
+                print(hyp.name, hyp.values, len(hyp.values))
+                if len(hyp.values) <= 2:
+                    nbits = 1
+                elif len(hyp.values) <=4:
+                    nbits = 2
+                elif len(hyp.values) <=6:
+                    nbits = 3
+                elif len(hyp.values) <=8:
+                    nbits = 4
+                else:
+                    sys.exit("At this moment please only use 8 possible values for hyperparameter as maximum.")
+                hyp.bitarray = BitArray(ga_individual_solution[i*nbits:i*nbits+nbits])  # (8)
                 hyp.setVal(hyp.values[hyp.bitarray.uint])
                 hyp_vary_list.append(hyp.val)
                 self.df_colnames.append(hyp.name)
