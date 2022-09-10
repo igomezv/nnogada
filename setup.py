@@ -15,7 +15,7 @@ setup(
     author='I Gomez-Vargas',
     author_email="igomez@icf.unam.mx",
     url="https://github.com/igomezv/nnogada",
-    license="GPLv3",
+    license="MIT",
     description="Genetic hyperparameter tuning for neural nets",
     long_description=desc,
     install_requires=required,
@@ -28,7 +28,7 @@ setup(
     classifiers=[
         "Intended Audience :: Science/Research",
         "Operating System :: OS Independent",
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
