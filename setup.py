@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
 required = ["numpy", "scipy", "sklearn", "tensorflow", "deap", 'bitstring']
 
 setup(
-    name="simplemc",
+    name="nnogada",
     version='0.0.1',    
     author='I Gomez-Vargas',
     author_email="igomez@icf.unam.mx",
