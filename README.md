@@ -4,6 +4,7 @@
 
 **nnogada** is a Python package that performs hyperparemeter tuning for artificial neural networks, particularly for Multi Layer Perceptrons, using simple genetic algorithms. Useful for generate better neural network models for data analysis. Currently, only works with feedforward neural networks in tensorflow.keras.
 
+If you use the code, please cite the paper arxiv:2209.02685.
 
 ## Description of this repository
 
