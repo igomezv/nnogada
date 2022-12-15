@@ -11,8 +11,9 @@ If you use the code, please cite the paper arxiv:2209.02685.
 - nnogada folder has the source code of the neural approximator with simple genetic algorithms.
 - In data folder we have some data used in tests. 
 
+**Note:** Final examples will be added when the paper is accepted.
+
 ## TODO 
 
-- Update with the same examples for the latest version of the paper.
 - Include convolutional, recurrent neural networks and other architectures.
-- Allow pytorch models.
+- To allow pytorch models.
