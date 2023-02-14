@@ -413,7 +413,7 @@ class Nnogada:
         #     print("-- Best Fitness = ", best.fitness.values[0])
         # extract statistics:
         # minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
-        # best_population = tools.selBest(population, k=k)
+        best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
         self.df_colnames = self.df_colnames + ['loss', 'score', 't']
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
