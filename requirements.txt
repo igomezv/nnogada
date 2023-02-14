@@ -8,3 +8,7 @@ pandas
 requests
 bitstring
 tensorflow~=2.7.1
+torch
+torchinfo
+torch_optimizer
+tqdm
