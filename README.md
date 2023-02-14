@@ -10,10 +10,15 @@ Before use the code, please install the requirements:
 
 If you use the code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*
 
+Contributions are welcome!
+
 ## Description of this repository
 
 - nnogada folder has the source code of the neural approximator with genetic algorithms.
 - In data folder we have some data used in tests. 
+- example_1.py is a classification task of galaxies, quasars and stars from SDSS using a keras neural model.
+- example_2.py is a regression task with SNeIa using a keras neural model.
+- example_3.py is the same as example_2.py but with a torch neural model.
 
 ## TODO 
 
