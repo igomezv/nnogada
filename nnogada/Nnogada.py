@@ -102,6 +102,7 @@ class Nnogada:
         self.Y_val = Y_val
 
         self.history = []
+        self.best = None
     def set_hyperparameters(self):
         """
         This small routine sets as variable the hyperparameters
@@ -179,7 +180,6 @@ class Nnogada:
             batch_size = int(self.batch_size.val)
             # Initialize the MLP
             self.model = MLP(int(self.X_train.shape[1]), int(self.Y_train.shape[1]), numneurons=self.num_units.val)
-
                              # numlayers=self.deep.val)
             self.model.apply(self.model.init_weights)
             self.model.float()
@@ -407,22 +407,20 @@ class Nnogada:
                                                        ngen=max_generations, stats=stats, halloffame=hof, pbar=pbar)
 
         # print info for best solution found:
-        best = hof.items[0]
-        if True:
-            print("-- Best Individual = ", best)
-            print("-- Best Fitness = ", best.fitness.values[0])
+        # best = hof.items[0]
+        # if self.ver:
+        #     print("-- Best Individual = ", best)
+        #     print("-- Best Fitness = ", best.fitness.values[0])
         # extract statistics:
         # minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
-            print(best.fitness.values)
-
-        best_population = tools.selBest(population, k=k)
+        # best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
         self.df_colnames = self.df_colnames + ['loss', 'score', 't']
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
         self.history = self.history.sort_values(by='loss', ascending=True)
         print("\nBest 5 solutions:\n-----------------\n")
-        print(self.df_colnames)
         print(self.history.head(5))
+        self.best = self.history.iloc[0]
 
         return best_population
 
