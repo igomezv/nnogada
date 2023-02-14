@@ -1,3 +1,5 @@
+# This is a classification example with keras
+# At this moment, only with keras we can perform classification tasks.
 import time
 from nnogada.Nnogada import Nnogada
 import pandas as pd
