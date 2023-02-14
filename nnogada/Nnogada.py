@@ -415,9 +415,10 @@ class Nnogada:
         # minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
         best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
-        self.df_colnames = self.df_colnames + ['loss', 'score', 't']
+        self.df_colnames = self.df_colnames + ['loss', 'score', 'time']
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
-        self.history = self.history.sort_values(by='loss', ascending=True)
+        self.history = self.history.sort_values(by='loss', ascending=True, inplace=True)
+        self.history.reset_index(drop=True, inplace=True)
         print("\nBest 5 solutions:\n-----------------\n")
         print(self.history.head(5))
         self.best = self.history.iloc[0]
