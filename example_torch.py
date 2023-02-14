@@ -46,11 +46,12 @@ net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_v
 # Set the possible values of hyperparameters and not use the default values from hyperparameters.py
 net_fit.set_hyperparameters()
 
+# Find best solutions
+net_fit.ga_with_elitism(population_size, max_generations, gene_length, k)
 # best solution
-best_population = net_fit.ga_with_elitism(population_size, max_generations, gene_length, k)
-print("best individual", best_population.iloc[0])
-print("Best number of nodes:", best_population.iloc[0]['num_units'])
-print("Best number of layers:", best_population.iloc[0]['deep'])
-print("Best number of batch_size:", best_population.iloc[0]['batch_size'])
+print("best individual", net_fit.best)
+print("Best number of nodes:", net_fit.best['num_units'])
+print("Best number of layers:", net_fit.best['deep'])
+print("Best number of batch_size:", net_fit.best['batch_size'])
 print("Total elapsed time:", (time.time()-t)/60, "minutes")
 
