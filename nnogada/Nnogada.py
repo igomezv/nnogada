@@ -4,11 +4,21 @@ import sys
 from bitstring import BitArray
 import time
 import tensorflow as tf
+# try:
+import torch
+from torch import nn
+from torchinfo import summary
+from torch_optimizer import AdaBound
+import torch.nn.functional as F
+
 import pandas as pd
 from nnogada.hyperparameters import *
 
+from tqdm import tqdm
+
 class Nnogada:
-    def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val, regression=True,
+    def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val,
+                 regression=True, verbose=False,
                  **kwargs):
         """
         Initialization of Nnogada class.
@@ -64,6 +74,7 @@ class Nnogada:
                 Loss function.
 
         """
+        self.neural_library = kwargs.pop('neural_library', 'keras')
         self.deep = kwargs.pop('deep', deep)
         self.num_units = kwargs.pop('num_units', num_units)
         self.batch_size = kwargs.pop('batch_size', batch_size)
@@ -77,7 +88,7 @@ class Nnogada:
                              self.epochs, self.act_fn, self.last_act_fn, self.loss_fn]
 
         self.hyp_to_find = hyp_to_find
-
+        self.verbose = verbose
         if regression:
             self.metric = 'mean_squared_error'
         else:
@@ -118,7 +129,8 @@ class Nnogada:
         self.df_colnames = []
         for i, hyp in enumerate(self.all_hyp_list):
             if hyp.vary:
-                print(hyp.name, hyp.values, len(hyp.values))
+                if self.verbose:
+                    print(hyp.name, hyp.values, len(hyp.values))
                 if len(hyp.values) <= 2:
                     nbits = 1
                 elif len(hyp.values) <=4:
@@ -133,36 +145,127 @@ class Nnogada:
                 hyp.setVal(hyp.values[hyp.bitarray.uint])
                 hyp_vary_list.append(hyp.val)
                 self.df_colnames.append(hyp.name)
-                print(hyp.name + ": {} | ".format(hyp.val), end='')
-        print("\n-------------------------------------------------")
+                if self.verbose:
+                    print(hyp.name + ": {} | ".format(hyp.val), end='')
+        if self.verbose:
+            print("\n-------------------------------------------------")
+        if self.neural_library == 'keras':
+            # Train model and predict on validation set
+            model = tf.keras.Sequential()
+            model.add(tf.keras.layers.Dense(self.num_units.val, input_shape=(int(self.X_train.shape[1]),)))
 
-        # Train model and predict on validation set
-        model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Dense(self.num_units.val, input_shape=(int(self.X_train.shape[1]),)))
+            for i in range(self.deep.val):
+                model.add(tf.keras.layers.Dense(self.num_units.val, activation=self.act_fn.val))
+            #             model.add(keras.layers.Dropout(0.3))
+            # model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=tf.nn.softmax))
+            model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=self.last_act_fn.val))
 
-        for i in range(self.deep.val):
-            model.add(tf.keras.layers.Dense(self.num_units.val, activation=self.act_fn.val))
-        #             model.add(keras.layers.Dropout(0.3))
-        # model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=tf.nn.softmax))
-        model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=self.last_act_fn.val))
+            optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+            model.compile(optimizer=optimizer, loss=self.loss_fn.val, metrics=[self.metric])
+            model.fit(self.X_train, self.Y_train, epochs=self.epochs.val, validation_data=(self.X_val, self.Y_val),
+                      callbacks=None, batch_size=self.batch_size.val, shuffle=1, verbose=int(self.verbose))
 
-        optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
-        model.compile(optimizer=optimizer, loss=self.loss_fn.val, metrics=[self.metric])
-        model.fit(self.X_train, self.Y_train, epochs=self.epochs.val, validation_data=(self.X_val, self.Y_val),
-                  callbacks=None, batch_size=self.batch_size.val, shuffle=1, verbose=0)
+            loss, score = model.evaluate(self.X_val, self.Y_val, verbose=int(self.verbose))
+            t = time.time() - t
+            if self.verbose:
+                print("Loss: {:.5f} Loss: {:.5f} Elapsed time: {:.2f}".format(score, loss, t))
+                print("-------------------------------------------------\n")
 
-        loss, score = model.evaluate(self.X_val, self.Y_val)
-        t = time.time() - t
-        print("Accuracy: {:.5f} Loss: {:.5f} Elapsed time: {:.2f}".format(score, loss, t))
-        print("-------------------------------------------------\n")
+            # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
+            # print(results)
+            self.history.append(hyp_vary_list+[loss, score, t])
+            return loss,
+        elif self.neural_library == 'torch':
+            batch_size = int(self.batch_size.val)
+            # Initialize the MLP
+            self.model = MLP(int(self.X_train.shape[1]), int(self.Y_train.shape[1]), numneurons=self.num_units.val)
 
-        # results = [hyp for hyp in hyp_vary_list].extend([loss, score, t])
-        # print(results)
-        self.history.append(hyp_vary_list+[loss, score, t])
-        return loss,
+                             # numlayers=self.deep.val)
+            self.model.apply(self.model.init_weights)
+            self.model.float()
+            dataset_train = LoadDataSet(self.X_train, self.Y_train)
+            dataset_val = LoadDataSet(self.X_val, self.Y_val)
+
+            trainloader = torch.utils.data.DataLoader(dataset_train, batch_size=batch_size, shuffle=True,
+                                                      num_workers=1)
+            validloader = torch.utils.data.DataLoader(dataset_val, batch_size=batch_size, shuffle=True,
+                                                      num_workers=1)
+
+            # Define the loss function and optimizer
+            # loss_function = nn.L1Loss()
+            loss_function = nn.MSELoss()
+            optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate.val)
+            # optimizer = torch.optim.Adadelta(self.model.parameters(), lr=self.learning_rate, weight_decay=1e-5)
+            # optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=1e-5)
+            # optimizer = AdaBound(self.model.parameters(), lr=self.learning_rate, final_lr=0.01, weight_decay=1e-10, gamma=0.1)
+            # optimizer = torch.optim.Adagrad(self.model.parameters(), lr=self.learning_rate,
+            #                                 lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10)
+            # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=5)
+            # it needs pytorch utilities
+            if self.verbose:
+                summary(self.model)
+            # Run the training loop
+            history_train = np.empty((1,))
+            history_val = np.empty((1,))
+            for epoch in range(0, self.epochs.val):
+                # Set current loss value
+                current_loss = 0.0
+                # Iterate over the DataLoader for training data
+                for i, data in enumerate(trainloader, 0):
+                    # Get and prepare inputs
+                    inputs, targets = data
+                    inputs, targets = inputs.float(), targets.float()
+                    targets = targets.reshape((targets.shape[0], targets.shape[1]))
+                    # Zero the gradients
+                    optimizer.zero_grad()
+
+                    # Perform forward pass
+                    outputs = self.model(inputs)
+
+                    # Compute loss
+                    loss = loss_function(outputs, targets)
+                    # Perform backward pass
+                    loss.backward()
+
+                    # Perform optimization
+                    optimizer.step()
+
+                    # Print statistics
+                    current_loss += loss.item()
+                    if i % 10 == 0:
+                        current_loss = 0.0
+                history_train = np.append(history_train, current_loss)
+
+                valid_loss = 0.0
+                self.model.eval()  # Optional when not using Model Specific layer
+                for i, data in enumerate(validloader, 0):
+                    # Get and prepare inputs
+                    inputs, targets = data
+                    inputs, targets = inputs.float(), targets.float()
+                    targets = targets.reshape((targets.shape[0], targets.shape[1]))
+
+                    output_val = self.model(inputs)
+                    valid_loss = loss_function(output_val, targets)
+                    valid_loss += loss.item()
+
+                history_val = np.append(history_val, valid_loss.item())
+                if self.verbose:
+                    print('Epoch: {}/{} | Training Loss: {:.5f} | Validation Loss:'
+                          '{:.5f}'.format(epoch + 1, self.epochs.val, loss.item(), valid_loss.item()), end='\r')
+
+            t = time.time() - t
+            if self.verbose:
+                print('\nTraining process has finished in {:.2f} minutes.'.format(t / 60))
+                print("-------------------------------------------------\n")
+            # history = {'loss': history_train, 'val_loss': history_val}
+            self.loss_val = history_val[-5:]
+            self.loss_train = history_train[-5:]
+            # print("current loss: {} valid_loss: {} loss_val: {}".format(loss, valid_loss, self.loss_val[-1]))
+            self.history.append(hyp_vary_list + [float(loss), float(valid_loss), t])
+            return self.loss_val[-1],
 
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
-                            halloffame=None, verbose=__debug__):
+                            halloffame=None, pbar=None):
         """
         Method from https://github.com/PacktPublishing/Hands-On-Genetic-Algorithms-with-Python.
 
@@ -175,10 +278,13 @@ class Nnogada:
         logbook.header = ['gen', 'nevals'] + (stats.fields if stats else [])
 
         # Evaluate the individuals with an invalid fitness
+
         invalid_ind = [ind for ind in population if not ind.fitness.valid]
         fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+        # nnogada: it evaluates all the individuals.
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
+
 
         if halloffame is None:
             raise ValueError("halloffame parameter must not be empty!")
@@ -188,11 +294,13 @@ class Nnogada:
 
         record = stats.compile(population) if stats else {}
         logbook.record(gen=0, nevals=len(invalid_ind), **record)
-        if verbose:
+        if self.verbose:
             print(logbook.stream)
 
         # Begin the generational process
         for gen in range(1, ngen + 1):
+            if pbar:
+                pbar.update(1)
 
             # Select the next generation individuals
             offspring = toolbox.select(population, len(population) - hof_size)
@@ -205,7 +313,6 @@ class Nnogada:
             fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
             for ind, fit in zip(invalid_ind, fitnesses):
                 ind.fitness.values = fit
-
             # add the best back to population:
             offspring.extend(halloffame.items)
 
@@ -218,7 +325,7 @@ class Nnogada:
             # Append the current generation statistics to the logbook
             record = stats.compile(population) if stats else {}
             logbook.record(gen=gen, nevals=len(invalid_ind), **record)
-            if verbose:
+            if self.verbose:
                 print(logbook.stream)
 
         return population, logbook
@@ -292,37 +399,76 @@ class Nnogada:
         hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
 
         # Genetic Algorithm flow with elitism:
+        try:
+            pbar = tqdm(total=max_generations)
+        except:
+            pbar = None
         population, logbook = self.eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
-                                                       ngen=max_generations, stats=stats, halloffame=hof, verbose=True)
+                                                       ngen=max_generations, stats=stats, halloffame=hof, pbar=pbar)
 
         # print info for best solution found:
         best = hof.items[0]
-        # print("-- Best Individual = ", best)
-        # print("-- Best Fitness = ", best.fitness.values[0])
-
+        if True:
+            print("-- Best Individual = ", best)
+            print("-- Best Fitness = ", best.fitness.values[0])
         # extract statistics:
-        minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
-        print(best.fitness.values)
-
-        # # plot statistics:
-        # sns.set_style("whitegrid")
-        # plt.plot(minFitnessValues, color='blue', label="Min")
-        # plt.plot(meanFitnessValues, color='green', label="Mean")
-        # plt.plot(maxFitnessValues, color='red', label="Max")
-        # plt.xlabel('Generation');
-        # plt.ylabel('Max / Min / Average Fitness')
-        # plt.legend()
-        # plt.title('Max, Min and Average fitness over Generations')
-        # plt.show()
+        # minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
+            print(best.fitness.values)
 
         best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
-        # print(self.history.head(5))
         self.df_colnames = self.df_colnames + ['loss', 'score', 't']
         self.history = pd.DataFrame(self.history, columns=self.df_colnames)
         self.history = self.history.sort_values(by='loss', ascending=True)
-        print("Best 5 solutions:\n-----------------\n")
+        print("\nBest 5 solutions:\n-----------------\n")
         print(self.df_colnames)
         print(self.history.head(5))
 
         return best_population
+
+
+# for torch nets
+class LoadDataSet:
+    def __init__(self, X, y, scale_data=False):
+        """
+        Prepare the dataset for regression
+        """
+        if not torch.is_tensor(X) and not torch.is_tensor(y):
+            # # Apply scaling if necessary
+            # if scale_data:
+            #     X = StandardScaler().fit_transform(X)
+            self.X = torch.from_numpy(X)
+            self.y = torch.from_numpy(y)
+    def __len__(self):
+        return len(self.X)
+    def __getitem__(self, i):
+        return self.X[i], self.y[i]
+class MLP(nn.Module):
+    def __init__(self, ncols, noutput, numneurons=200,
+                 numlayers=3, dropout=0.5):
+        """
+            Multilayer Perceptron for regression.
+        """
+        super().__init__()
+
+        l_input = nn.Linear(ncols, numneurons)
+        a_input = nn.ReLU()
+
+        l_hidden = nn.Linear(numneurons, numneurons)
+        a_hidden = nn.ReLU()
+
+        l_output = nn.Linear(numneurons, noutput)
+
+        l = [l_input, a_input]
+        for _ in range(numlayers):
+            l.append(l_hidden)
+            l.append(a_hidden)
+        l.append(l_output)
+        self.module_list = nn.ModuleList(l)
+    def forward(self, x):
+        for f in self.module_list:
+            x = f(x)
+        return x
+    def init_weights(self, m):
+        if type(m) == nn.Linear:
+            nn.init.xavier_normal_(m.weight)
