@@ -1,4 +1,4 @@
-[<img src="https://img.shields.io/badge/astro--ph.CO-%20%09arXiv%3A2209.02685-red.svg">](https://arxiv.org/abs/2209.02685)
+[<img src="https://img.shields.io/badge/astro--ph.IM-%20%09arXiv%3A2209.02685-green.svg">](https://arxiv.org/abs/2209.02685)
 
 # Neural Networks Optimized by Genetic Algorithms for Data Analysis (NNOGADA) 
 
