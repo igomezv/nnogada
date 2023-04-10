@@ -10,17 +10,17 @@ Before use the code, please install the requirements:
  
 Or you can try install nnogada in your computer:
 
- $ git clone https://github.com/igomezv/nnogada
-      
- $ cd nnogada
- 
- $ pip3 install -e .
+     $ git clone https://github.com/igomezv/nnogada
+
+     $ cd nnogada
+
+     $ pip3 install -e .
 
 then you can delete the cloned repo because you must have simplemc installed locally.
 
 Other way to install nnogada (without clonning) is:
 
- $ pip3 install -e git+https://github.com/igomezv/nnogada#egg=nnogada
+    $ pip3 install -e git+https://github.com/igomezv/nnogada#egg=nnogada
 
 
 If you use the code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*
