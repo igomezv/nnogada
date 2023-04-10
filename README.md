@@ -39,4 +39,4 @@ Contributions are welcome!
 
 - Include convolutional, recurrent neural networks and other architectures.
 - To allow pytorch models for classification.
-- pip install.
+- Upload to pypy.
