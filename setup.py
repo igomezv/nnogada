@@ -12,7 +12,7 @@ required = ["numpy", "scipy", "sklearn", "tensorflow", "deap", "bitstring", "pan
 
 setup(
     name="nnogada",
-    version='0.9.1',
+    version='0.9.1.1',
     author='I Gomez-Vargas',
     author_email="igomez@icf.unam.mx",
     url="https://github.com/igomezv/nnogada",
