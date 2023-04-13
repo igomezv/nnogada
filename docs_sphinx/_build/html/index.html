@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nnogada &mdash; nnogada latest documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Requirements" href="requirements.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> nnogada
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">nnogada</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>nnogada</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="nnogada">
+<h1>nnogada<a class="headerlink" href="#nnogada" title="Permalink to this headline"></a></h1>
+<p>This is the <code class="docutils literal notranslate"><span class="pre">nnogada</span></code> documentation, a Python package for the hyperparameter tuning for feedforward neural networks implemented by <code class="docutils literal notranslate"><span class="pre">keras</span></code> or <code class="docutils literal notranslate"><span class="pre">torch</span></code>.</p>
+<p>There are 4 options to install, or use, <code class="docutils literal notranslate"><span class="pre">nnogada</span></code>:</p>
+<ol class="arabic">
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">nnogada</span></code>.</p>
+</li>
+<li><p class="first">If you have problem with pypy, you can install <code class="docutils literal notranslate"><span class="pre">nnogada</span></code> without clonning:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>git+https://github.com/igomezv/Nnogada#egg<span class="o">=</span>nnogada
+</pre></div>
+</div>
+</li>
+</ol>
+<ol class="arabic" start="2">
+<li><p class="first">You can use <code class="docutils literal notranslate"><span class="pre">nnogada</span></code> in Google Colab, please see the Section <a class="reference external" href="requirements.html#using-google-colab">Using Google Colab in Requirements</a>.</p>
+</li>
+<li><p class="first">On the other hand, you can visit the <a class="reference external" href="https://github.com/igomezv/Nnogada.git">GitHub code repository</a>, download the <a class="reference external" href="https://github.com/igomezv/Nnogada/archive/refs/heads/master.zip">source code here</a> or clone it as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/igomezv/Nnogada.git
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Then, you can install it:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>Nnogada
+
+pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</div></blockquote>
+<p>Please read the <a class="reference external" href="intro.html">introduction</a> section where you can see the <a class="reference external" href="intro.html#requirements">requirements</a>  and a simple <a class="reference external" href="intro.html#quick-start">quick start</a>.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">nnogada</span></code> citation, please go to the <a class="reference external" href="Citation.html#cite-external-codes">citation  section</a>.</p>
+<p>Flow:</p>
+<div class="figure">
+<img alt="_images/geneticalg.png" src="_images/geneticalg.png" />
+</div>
+<p>Output:</p>
+<div class="figure">
+<img alt="_images/nnogada_output.png" src="_images/nnogada_output.png" />
+</div>
+<div class="section" id="extended-index">
+<h2>Extended index<a class="headerlink" href="#extended-index" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><strong>0.9.0.0 (13/04/2023)</strong> First release.</li>
+</ul>
+</div>
+<div class="section" id="to-do">
+<h2>TO DO<a class="headerlink" href="#to-do" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li>Add classification for torch models.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="requirements.html" class="btn btn-neutral float-right" title="Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Isidro Gomez-Vargas.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

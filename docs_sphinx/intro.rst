@@ -1,0 +1,125 @@
+==================
+Examples
+==================
+  
+   
+After installing the required dependencies as outlined in the `requirements <requirements.html>`_ file, yyou can utilize genetic algorithms for hyperparameter tuning in regression tasks using both ``tensorflow.keras`` and ``torch`` models. For example, the GitHub repository contains examples that demonstrate neural network reconstruction of the distance modulus using the Joint Light Analysis (JLA) compilation, similar to the IV.A section of the reference *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*.
+
+1) Using ``tensorflow.keras``:
+
+.. code-block:: python
+
+	import time
+	from nnogada.Nnogada import Nnogada
+	import pandas as pd
+	from sklearn.preprocessing import StandardScaler
+	import numpy as np
+
+
+	df = pd.read_csv('data/jla.csv')
+	N = len(df.values)
+	randomize = np.random.permutation(N)
+	data = df.values[randomize]
+	N = len(df.values)
+	z = data[:, 0]
+	y = data[:, 1:3] ### toma el resto de variables a predecir
+	y[:,1] = y[:, 1]**2+data[:,2]
+	np.shape(y)
+
+
+	dmag = df["dmb"]
+	df2 = df['errors']+df['dmb']**2
+
+	scalerz = StandardScaler()
+	scalerz.fit(z.reshape(-1, 1))
+	z = scalerz.transform(z.reshape(-1, 1))
+
+	split = 0.75
+	ntrain = int(split * len(z))
+	indx = [ntrain]
+	X_train, X_val = np.split(z, indx)
+	Y_train, Y_val = np.split(y, indx)
+
+	population_size = 11   # max of individuals per generation
+	max_generations = 5    # number of generations
+	gene_length = 4        # lenght of the gene, depends on how many hiperparameters are tested
+	k = 1                  # num. of finalist individuals
+
+	t = time.time()
+	datos = []
+
+	# Define the hyperparameters for the search
+	hyperparams = {'deep': [1, 2], 'num_units': [1,2], 'batch_size': [256,1048]}
+
+	# generate a Nnogada instance
+	net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
+	# Set the possible values of hyperparameters and not use the default values from hyperparameters.py
+	net_fit.set_hyperparameters()
+
+	# best solution
+	best_population = net_fit.ga_with_elitism(population_size, max_generations, gene_length, k)
+	print(best_population)
+	print("Total elapsed time:", (time.time()-t)/60, "minutes")
+
+
+
+2) Using ``torch``:
+
+.. code-block:: python
+
+	import time
+	from nnogada.Nnogada import Nnogada
+	import pandas as pd
+	from sklearn.preprocessing import StandardScaler
+	import numpy as np
+
+
+	df = pd.read_csv('data/jla.csv')
+	N = len(df.values)
+	randomize = np.random.permutation(N)
+	data = df.values[randomize]
+	N = len(df.values)
+	z = data[:, 0]
+	y = data[:, 1:3] ### toma el resto de variables a predecir
+	y[:,1] = y[:, 1]**2+data[:,2]
+	np.shape(y)
+
+
+	dmag = df["dmb"]
+	df2 = df['errors']+df['dmb']**2
+
+	scalerz = StandardScaler()
+	scalerz.fit(z.reshape(-1, 1))
+	z = scalerz.transform(z.reshape(-1, 1))
+
+	split = 0.75
+	ntrain = int(split * len(z))
+	indx = [ntrain]
+	X_train, X_val = np.split(z, indx)
+	Y_train, Y_val = np.split(y, indx)
+
+	population_size = 11   # max of individuals per generation
+	max_generations = 5    # number of generations
+	gene_length = 4        # lenght of the gene, depends on how many hiperparameters are tested
+	k = 1                  # num. of finalist individuals
+
+	t = time.time()
+	# Define the hyperparameters for the search
+	hyperparams = {'deep': [1, 2], 'num_units': [1,2], 'batch_size': [2048,1048]}
+
+	# generate a Nnogada instance
+	net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val,
+		          neural_library='torch')
+	# Set the possible values of hyperparameters and not use the default values from hyperparameters.py
+	net_fit.set_hyperparameters()
+
+	# Find best solutions
+	net_fit.ga_with_elitism(population_size, max_generations, gene_length, k)
+	# best solution
+	print("best individual", net_fit.best)
+	print("Best number of nodes:", net_fit.best['num_units'])
+	print("Best number of layers:", net_fit.best['deep'])
+	print("Best number of batch_size:", net_fit.best['batch_size'])
+	print("Total elapsed time:", (time.time()-t)/60, "minutes")
+
+

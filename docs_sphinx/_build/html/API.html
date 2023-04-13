@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API &mdash; nnogada latest documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Citation" href="Citation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> nnogada
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Citation.html">Citation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nnogada">Nnogada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nnogada.Hyperparameter">Hyperparameter</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">nnogada</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/API.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline"></a></h1>
+<p>This page details the methods and classes provided by the <code class="docutils literal notranslate"><span class="pre">nnogada</span></code>.</p>
+<div class="section" id="nnogada">
+<h2>Nnogada<a class="headerlink" href="#nnogada" title="Permalink to this headline"></a></h2>
+<span class="target" id="module-nnogada.Nnogada"></span><dl class="class">
+<dt id="nnogada.Nnogada.MLP">
+<em class="property">class </em><code class="descclassname">nnogada.Nnogada.</code><code class="descname">MLP</code><span class="sig-paren">(</span><em>ncols</em>, <em>noutput</em>, <em>numneurons=200</em>, <em>numlayers=3</em>, <em>dropout=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#MLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.MLP" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Multilayer Perceptron class for regression.</p>
+<dl class="method">
+<dt id="nnogada.Nnogada.MLP.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ncols</em>, <em>noutput</em>, <em>numneurons=200</em>, <em>numlayers=3</em>, <em>dropout=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#MLP.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.MLP.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialization method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ncols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of attributes.</li>
+<li><strong>noutput</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Size of the output.</li>
+<li><strong>numneurons</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of neurons for the hidden layers.</li>
+<li><strong>numlayers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of hidden layers.</li>
+<li><strong>dropout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Dropout value.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Nnogada.MLP.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#MLP.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.MLP.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward method using activation function and other functions defined in the torch architecture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>numpy.array</em>) – Input array.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>x</strong> – Array before a forward step.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Nnogada.MLP.init_weights">
+<code class="descname">init_weights</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#MLP.init_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.MLP.init_weights" title="Permalink to this definition"></a></dt>
+<dd><p>Initilization of the ANN weights.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>m</strong> (<em>MLP class.</em>) – Multilayer perceptron model.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nnogada.Nnogada.Nnogada">
+<em class="property">class </em><code class="descclassname">nnogada.Nnogada.</code><code class="descname">Nnogada</code><span class="sig-paren">(</span><em>hyp_to_find</em>, <em>X_train</em>, <em>Y_train</em>, <em>X_val</em>, <em>Y_val</em>, <em>regression=True</em>, <em>verbose=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#Nnogada"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.Nnogada" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Main class for nnogada.</p>
+<dl class="method">
+<dt id="nnogada.Nnogada.Nnogada.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>hyp_to_find</em>, <em>X_train</em>, <em>Y_train</em>, <em>X_val</em>, <em>Y_val</em>, <em>regression=True</em>, <em>verbose=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#Nnogada.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.Nnogada.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialization of Nnogada class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hyp_to_find</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Dictionary with the free hyperparameters of the neural net. The names must match with the names
+in the hyperparameters.py file.
+Ex: hyperparams = {‘deep’: [2,3], ‘num_units’: [100, 200], ‘batch_size’: [8, 32]}</li>
+<li><strong>X_train</strong> (<em>numpy.ndarray</em>) – Set of attributes, or independent variables, for training.</li>
+<li><strong>Y_train</strong> (<em>numpy.ndarray</em>) – Set of labels or dependent variable for training.</li>
+<li><strong>X_val</strong> (<em>numpy.ndarray</em>) – Set of attributes, or independent variables, for testing/validation.</li>
+<li><strong>Y_test</strong> (<em>numpy.ndarray</em>) – Set of labels or dependent variable for testing/validation.</li>
+<li><strong>regression</strong> (<em>Boolean</em>) – If True assumes a regression task. Else, a classification is assumed. It
+affects the default choice in the activation function for the last layer,
+if regression it is the linear function, else it is softmax.</li>
+<li><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Optional arguments:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>deep: Hyperparameter object</dt>
+<dd>Number of layers.</dd>
+<dt>num_units: Hyperparameter object</dt>
+<dd>Number of nodes by layer.</dd>
+<dt>batch_size: Hyperparameter object</dt>
+<dd>Batch size.</dd>
+<dt>learning_rate: Hyperparameter object</dt>
+<dd>Learning rate for Adam optimizer.</dd>
+<dt>epochs: Hyperparameter object</dt>
+<dd>Number of epochs for training.</dd>
+<dt>act_fn: Hyperparameter object</dt>
+<dd>Activation function for the hidden layers.</dd>
+<dt>last_act_fn: Hyperparameter object</dt>
+<dd>Activation function for the last layer.</dd>
+<dt>loss_fn: Hyperparameter object</dt>
+<dd>Loss function.</dd>
+</dl>
+</div></blockquote>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Nnogada.Nnogada.eaSimpleWithElitism">
+<code class="descname">eaSimpleWithElitism</code><span class="sig-paren">(</span><em>population</em>, <em>toolbox</em>, <em>cxpb</em>, <em>mutpb</em>, <em>ngen</em>, <em>stats=None</em>, <em>halloffame=None</em>, <em>pbar=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#Nnogada.eaSimpleWithElitism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.Nnogada.eaSimpleWithElitism" title="Permalink to this definition"></a></dt>
+<dd><p>Method based on <a class="reference external" href="https://github.com/PacktPublishing/Hands-On-Genetic-Algorithms-with-Python">https://github.com/PacktPublishing/Hands-On-Genetic-Algorithms-with-Python</a>.</p>
+<p>The individuals contained in the halloffame are directly injected into the next generation and are not subject to the
+genetic operators of selection, crossover and mutation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>population</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – List of individuals.</li>
+<li><strong>toolbox</strong> (<em>deap.base.Toolbox object</em>) – Toolbox that contains the genetic operators.</li>
+<li><strong>cxpb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The probability of crossover between two individuals.</li>
+<li><strong>mutpb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Probability of mutation.</li>
+<li><strong>ngen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of generation.</li>
+<li><strong>stats</strong> (<em>deap.tools.Statistics object</em>) – A Statistics object that is updated inplace, optional.</li>
+<li><strong>halloffame</strong> (<em>deap.tools.HallOfFame object</em>) – Object that will contain the best individuals, optional.</li>
+<li><strong>pbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Flag to use progres bar with tqdm library.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>population</strong> (<em>list</em>) – List of individuals.</li>
+<li><strong>logbook</strong> (<em>deap.tools.Logbook object.</em>) – Statistics of the evolution.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Nnogada.Nnogada.ga_with_elitism">
+<code class="descname">ga_with_elitism</code><span class="sig-paren">(</span><em>population_size</em>, <em>max_generations</em>, <em>gene_length</em>, <em>k</em>, <em>pmutation=0.5</em>, <em>pcrossover=0.5</em>, <em>hof=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#Nnogada.ga_with_elitism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.Nnogada.ga_with_elitism" title="Permalink to this definition"></a></dt>
+<dd><p>Simple genetic algorithm with elitism.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>population_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Population size.</li>
+<li><strong>max_generations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum number of generations.</li>
+<li><strong>gene_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Length of each gene.</li>
+<li><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – k parameter for the tournament selection method</li>
+<li><strong>pmutation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Probability of mutation, between 0 and 1.</li>
+<li><strong>pcrossover</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Probability of crossover, between 0 and 1.</li>
+<li><strong>hof</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of individuals to stay in the hall of fame.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>best_population</strong> – Individuals in the last population.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Nnogada.Nnogada.neural_train_evaluate">
+<code class="descname">neural_train_evaluate</code><span class="sig-paren">(</span><em>ga_individual_solution</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#Nnogada.neural_train_evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.Nnogada.neural_train_evaluate" title="Permalink to this definition"></a></dt>
+<dd><p>This train and evaluates the neural network models with the different
+solutions proposed by the Genetic Algorithm .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ga_individual_solution</strong> – Individual of the genetic algorithm.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>loss</strong> – Last value for the loss function.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Nnogada.Nnogada.set_hyperparameters">
+<code class="descname">set_hyperparameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Nnogada.html#Nnogada.set_hyperparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Nnogada.Nnogada.set_hyperparameters" title="Permalink to this definition"></a></dt>
+<dd><p>This small routine sets as variable the hyperparameters
+indicated in the hyp_to_find dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nnogada.Hyperparameter">
+<span id="hyperparameter"></span><h2>Hyperparameter<a class="headerlink" href="#module-nnogada.Hyperparameter" title="Permalink to this headline"></a></h2>
+<dl class="class">
+<dt id="nnogada.Hyperparameter.Hyperparameter">
+<em class="property">class </em><code class="descclassname">nnogada.Hyperparameter.</code><code class="descname">Hyperparameter</code><span class="sig-paren">(</span><em>name</em>, <em>values</em>, <em>val</em>, <em>vary=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Hyperparameter.html#Hyperparameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Hyperparameter.Hyperparameter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This class defines a hyperparameter object.</p>
+<dl class="method">
+<dt id="nnogada.Hyperparameter.Hyperparameter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>values</em>, <em>val</em>, <em>vary=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Hyperparameter.html#Hyperparameter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Hyperparameter.Hyperparameter.__init__" title="Permalink to this definition"></a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Name of the hyperparameter.</li>
+<li><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – Possible values of the hyperparameter.</li>
+<li><strong>val</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Value of the hyperparameter if vary is false.</li>
+<li><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Flag that indicates if the hyperparameter is fixed (vary=False) or not (vary=True).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Hyperparameter.Hyperparameter.setVal">
+<code class="descname">setVal</code><span class="sig-paren">(</span><em>new_val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Hyperparameter.html#Hyperparameter.setVal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Hyperparameter.Hyperparameter.setVal" title="Permalink to this definition"></a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_val</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Set a new value for the hyperparameter object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nnogada.Hyperparameter.Hyperparameter.setValues">
+<code class="descname">setValues</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nnogada/Hyperparameter.html#Hyperparameter.setValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nnogada.Hyperparameter.Hyperparameter.setValues" title="Permalink to this definition"></a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of hyperparameters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Citation.html" class="btn btn-neutral float-left" title="Citation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Isidro Gomez-Vargas.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
