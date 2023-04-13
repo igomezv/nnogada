@@ -2,12 +2,11 @@
 nnogada
 ===========
 
-
 This is the ``nnogada`` documentation, a Python package for the hyperparameter tuning for feedforward neural networks implemented by ``keras`` or ``torch``. 
 
-There are 4 options to install, or use, ``SimpleMC``: 
+There are 4 options to install, or use, ``nnogada``: 
 
-1) ``pip3 install simplemc``.
+1) ``pip3 install nnogada``.
 
 2) If you have problem with pypy, you can install ``nnogada`` without clonning: 
 
@@ -32,7 +31,6 @@ Then, you can install it:
       pip3 install -e .
 
   
-
 Please read the `introduction <intro.html>`_ section where you can see the `requirements <intro.html#requirements>`_  and a simple `quick start <intro.html#quick-start>`_. 
 
 
@@ -44,8 +42,12 @@ Extended index
 
 .. toctree::
    :maxdepth: 1
-
+   
+   requirements
+   
    intro
+   
+   Citation
    
    API
 
@@ -53,7 +55,7 @@ Extended index
 Changelog
 ----------
 
-- **0.9.1.0 (13/04/2023)** First release.
+- **0.9.0.0 (13/04/2023)** First release.
 
 
 TO DO

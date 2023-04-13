@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>First steps &mdash; nnogada latest documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Examples &mdash; nnogada latest documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -16,8 +16,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Requirements" href="requirements.html" />
-    <link rel="prev" title="nnogada" href="index.html" /> 
+    <link rel="next" title="Citation" href="Citation.html" />
+    <link rel="prev" title="Requirements" href="requirements.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,10 +39,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">First steps</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="requirements.html">Requirements</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
 </ul>
 
@@ -60,7 +59,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>First steps</li>
+      <li>Examples</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -70,32 +69,132 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="first-steps">
-<h1>First steps<a class="headerlink" href="#first-steps" title="Permalink to this headline"></a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
-</ul>
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h1>
+<p>After installing the required dependencies as outlined in the <a class="reference external" href="requirements.html">requirements</a> file, yyou can utilize genetic algorithms for hyperparameter tuning in regression tasks using both <code class="docutils literal notranslate"><span class="pre">tensorflow.keras</span></code> and <code class="docutils literal notranslate"><span class="pre">torch</span></code> models. For example, the GitHub repository contains examples that demonstrate neural network reconstruction of the distance modulus using the Joint Light Analysis (JLA) compilation, similar to the IV.A section of the reference <em>Gómez-Vargas, I., Andrade, J. B., &amp; Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.</em>.</p>
+<ol class="arabic simple">
+<li>Using <code class="docutils literal notranslate"><span class="pre">tensorflow.keras</span></code>:</li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">nnogada.Nnogada</span> <span class="kn">import</span> <span class="n">Nnogada</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/jla.csv&#39;</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">randomize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">randomize</span><span class="p">]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="c1">### toma el resto de variables a predecir</span>
+<span class="n">y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+
+<span class="n">dmag</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dmb&quot;</span><span class="p">]</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dmb&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">scalerz</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scalerz</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">scalerz</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">split</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="n">ntrain</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">split</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+<span class="n">indx</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntrain</span><span class="p">]</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indx</span><span class="p">)</span>
+<span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">indx</span><span class="p">)</span>
+
+<span class="n">population_size</span> <span class="o">=</span> <span class="mi">11</span>   <span class="c1"># max of individuals per generation</span>
+<span class="n">max_generations</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c1"># number of generations</span>
+<span class="n">gene_length</span> <span class="o">=</span> <span class="mi">4</span>        <span class="c1"># lenght of the gene, depends on how many hiperparameters are tested</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>                  <span class="c1"># num. of finalist individuals</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">datos</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Define the hyperparameters for the search</span>
+<span class="n">hyperparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;deep&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;num_units&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">256</span><span class="p">,</span><span class="mi">1048</span><span class="p">]}</span>
+
+<span class="c1"># generate a Nnogada instance</span>
+<span class="n">net_fit</span> <span class="o">=</span> <span class="n">Nnogada</span><span class="p">(</span><span class="n">hyp_to_find</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="o">=</span><span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="o">=</span><span class="n">Y_val</span><span class="p">)</span>
+<span class="c1"># Set the possible values of hyperparameters and not use the default values from hyperparameters.py</span>
+<span class="n">net_fit</span><span class="o">.</span><span class="n">set_hyperparameters</span><span class="p">()</span>
+
+<span class="c1"># best solution</span>
+<span class="n">best_population</span> <span class="o">=</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">ga_with_elitism</span><span class="p">(</span><span class="n">population_size</span><span class="p">,</span> <span class="n">max_generations</span><span class="p">,</span> <span class="n">gene_length</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">best_population</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Total elapsed time:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;minutes&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>After proper installation of the <a class="reference external" href="requirements.html">requirements</a>, generally speaking, the steps to run <code class="docutils literal notranslate"><span class="pre">SimpleMC</span></code>  are as follows: 1) configure an <span class="xref std std-ref">ini file</span>, 2) read this in a <span class="xref std std-ref">Python script</span>, 3) <span class="xref std std-ref">run in terminal</span>, and 4) <span class="xref std std-ref">analyze outputs</span>.</p>
-<p>The output chains of Bayesian inference algoritms (MCMC and nested sampling) are text files that have the same structure as the <a class="reference external" href="https://cosmologist.info/cosmomc/">CosmoMC</a> chains consisting in:</p>
-<blockquote>
-<div><ul class="simple">
-<li>First column.- weights of the sampling method.</li>
-<li>Second column.- log-likelihood function.</li>
-<li>Third to N+2 columns.- N free parameters of the cosmological model under analysis.</li>
-<li>Last columns.- log-likelihood function per each type of data and derived parameters.</li>
-</ul>
-</div></blockquote>
-<p>In addition, two other output files are generated: a summary and a <code class="docutils literal notranslate"><span class="pre">.paramnames</span></code> file with the names of the free parameters of the cosmological model.</p>
+<ol class="arabic simple" start="2">
+<li>Using <code class="docutils literal notranslate"><span class="pre">torch</span></code>:</li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">nnogada.Nnogada</span> <span class="kn">import</span> <span class="n">Nnogada</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/jla.csv&#39;</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">randomize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">randomize</span><span class="p">]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="c1">### toma el resto de variables a predecir</span>
+<span class="n">y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+
+<span class="n">dmag</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dmb&quot;</span><span class="p">]</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dmb&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">scalerz</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scalerz</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">scalerz</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">split</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="n">ntrain</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">split</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+<span class="n">indx</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntrain</span><span class="p">]</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indx</span><span class="p">)</span>
+<span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">indx</span><span class="p">)</span>
+
+<span class="n">population_size</span> <span class="o">=</span> <span class="mi">11</span>   <span class="c1"># max of individuals per generation</span>
+<span class="n">max_generations</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c1"># number of generations</span>
+<span class="n">gene_length</span> <span class="o">=</span> <span class="mi">4</span>        <span class="c1"># lenght of the gene, depends on how many hiperparameters are tested</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>                  <span class="c1"># num. of finalist individuals</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Define the hyperparameters for the search</span>
+<span class="n">hyperparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;deep&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;num_units&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2048</span><span class="p">,</span><span class="mi">1048</span><span class="p">]}</span>
+
+<span class="c1"># generate a Nnogada instance</span>
+<span class="n">net_fit</span> <span class="o">=</span> <span class="n">Nnogada</span><span class="p">(</span><span class="n">hyp_to_find</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">X_val</span><span class="o">=</span><span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="o">=</span><span class="n">Y_val</span><span class="p">,</span>
+                  <span class="n">neural_library</span><span class="o">=</span><span class="s1">&#39;torch&#39;</span><span class="p">)</span>
+<span class="c1"># Set the possible values of hyperparameters and not use the default values from hyperparameters.py</span>
+<span class="n">net_fit</span><span class="o">.</span><span class="n">set_hyperparameters</span><span class="p">()</span>
+
+<span class="c1"># Find best solutions</span>
+<span class="n">net_fit</span><span class="o">.</span><span class="n">ga_with_elitism</span><span class="p">(</span><span class="n">population_size</span><span class="p">,</span> <span class="n">max_generations</span><span class="p">,</span> <span class="n">gene_length</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="c1"># best solution</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;best individual&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best number of nodes:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;num_units&#39;</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best number of layers:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;deep&#39;</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best number of batch_size:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;batch_size&#39;</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Total elapsed time:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;minutes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="nnogada" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="requirements.html" class="btn btn-neutral float-right" title="Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="requirements.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Citation.html" class="btn btn-neutral float-right" title="Citation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
