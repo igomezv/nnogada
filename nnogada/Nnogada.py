@@ -4,7 +4,6 @@ import sys
 from bitstring import BitArray
 import time
 import tensorflow as tf
-# try:
 import torch
 from torch import nn
 from torchinfo import summary
@@ -17,6 +16,9 @@ from nnogada.hyperparameters import *
 from tqdm import tqdm
 
 class Nnogada:
+    """
+    Main class for nnogada.
+    """
     def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val,
                  regression=True, verbose=False,
                  **kwargs):
@@ -123,6 +125,13 @@ class Nnogada:
 
         ga_individual_solution:
             Individual of the genetic algorithm.
+
+        Returns
+        -------
+
+        loss: float
+            Last value for the loss function.
+
         """
         t = time.time()
         # Decode GA solution to integer for window_size and num_units
@@ -267,12 +276,36 @@ class Nnogada:
     def eaSimpleWithElitism(self, population, toolbox, cxpb, mutpb, ngen, stats=None,
                             halloffame=None, pbar=None):
         """
-        Method from https://github.com/PacktPublishing/Hands-On-Genetic-Algorithms-with-Python.
+        Method based on https://github.com/PacktPublishing/Hands-On-Genetic-Algorithms-with-Python.
 
-        This algorithm is similar to DEAP eaSimple() algorithm, with the modification that
-        halloffame is used to implement an elitism mechanism. The individuals contained in the
-        halloffame are directly injected into the next generation and are not subject to the
+        The individuals contained in the halloffame are directly injected into the next generation and are not subject to the
         genetic operators of selection, crossover and mutation.
+
+        Parameters
+        ----------
+        population : list
+            List of individuals.
+        toolbox : deap.base.Toolbox object
+            Toolbox that contains the genetic operators.
+        cxpb : float
+            The probability of crossover between two individuals.
+        mutpb : float
+            Probability of mutation.
+        ngen : int
+            Number of generation.
+        stats : deap.tools.Statistics object
+             A Statistics object that is updated inplace, optional.
+        halloffame : deap.tools.HallOfFame object
+            Object that will contain the best individuals, optional.
+        pbar : bool
+            Flag to use progres bar with tqdm library.
+
+        Returns
+        -------
+        population : list
+            List of individuals.
+        logbook : deap.tools.Logbook object.
+         Statistics of the evolution.
         """
         logbook = tools.Logbook()
         logbook.header = ['gen', 'nevals'] + (stats.fields if stats else [])
@@ -284,8 +317,6 @@ class Nnogada:
         # nnogada: it evaluates all the individuals.
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
-
-
         if halloffame is None:
             raise ValueError("halloffame parameter must not be empty!")
 
@@ -359,15 +390,18 @@ class Nnogada:
         hof: int
             Number of individuals to stay in the hall of fame. It determines
             the elitism performance.
+
+        Returns
+        ---------
+        best_population : list
+            Individuals in the last population.
         """
         # Genetic Algorithm constants:
         P_CROSSOVER = pcrossover  # probability for crossover
         P_MUTATION = pmutation  # probability for mutating an individual
         HALL_OF_FAME_SIZE = hof  # Best individuals that pass to the other generation
-
         # set the random seed:
         toolbox = base.Toolbox()
-
         # As we are trying to minimize the RMSE score, that's why using -1.0.
         # In case, when you want to maximize accuracy for instance, use 1.0
         creator.create('FitnessMin', base.Fitness, weights=[-1.0])
@@ -406,13 +440,6 @@ class Nnogada:
         population, logbook = self.eaSimpleWithElitism(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
                                                        ngen=max_generations, stats=stats, halloffame=hof, pbar=pbar)
 
-        # print info for best solution found:
-        # best = hof.items[0]
-        # if self.ver:
-        #     print("-- Best Individual = ", best)
-        #     print("-- Best Fitness = ", best.fitness.values[0])
-        # extract statistics:
-        # minFitnessValues, meanFitnessValues, maxFitnessValues = logbook.select("min", "max", "avg")
         best_population = tools.selBest(population, k=k)
         # convert the history list in a data frame
         self.df_colnames = self.df_colnames + ['loss', 'score', 'time']
@@ -424,12 +451,20 @@ class Nnogada:
 
         return best_population
 
-
 # for torch nets
 class LoadDataSet:
     def __init__(self, X, y, scale_data=False):
         """
         Prepare the dataset for regression
+
+        Parameters
+        ----------
+        X : numpy.darray
+            Input data for the neural network training.
+        y : numpy.darray
+            Output data for the neural network training.
+        scale_data : bool
+            Flag to scale the training data.
         """
         if not torch.is_tensor(X) and not torch.is_tensor(y):
             # # Apply scaling if necessary
@@ -441,11 +476,25 @@ class LoadDataSet:
         return len(self.X)
     def __getitem__(self, i):
         return self.X[i], self.y[i]
+
 class MLP(nn.Module):
     def __init__(self, ncols, noutput, numneurons=200,
                  numlayers=3, dropout=0.5):
         """
-            Multilayer Perceptron for regression.
+        Multilayer Perceptron class for regression.
+
+        Parameters
+        ----------
+        ncols : int
+            Number of attributes.
+        noutput : int
+            Size of the output.
+        numneurons : int
+            Number of neurons for the hidden layers.
+        numlayers : int
+            Number of hidden layers.
+        dropout : float
+            Dropout value.
         """
         super().__init__()
 
@@ -464,9 +513,30 @@ class MLP(nn.Module):
         l.append(l_output)
         self.module_list = nn.ModuleList(l)
     def forward(self, x):
+        """
+        Forward method using activation function and other functions defined in the torch architecture.
+
+        Parameters
+        ----------
+        x : numpy.array
+            Input array.
+
+        Returns
+        -------
+        x : numpy.array
+            Array before a forward step.
+
+        """
         for f in self.module_list:
             x = f(x)
         return x
     def init_weights(self, m):
+        """
+        Initilization of the ANN weights.
+
+        Parameters
+        ----------
+        m : MLP class.
+        """
         if type(m) == nn.Linear:
             nn.init.xavier_normal_(m.weight)
