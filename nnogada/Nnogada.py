@@ -49,31 +49,29 @@ class Nnogada:
             affects the default choice in the activation function for the last layer,
             if regression it is the linear function, else it is softmax.
 
-        **kwargs
-        --------
-            deep: Hyperparameter object
-                Number of layers.
+        **kwargs: kwargs
+            Optional arguments:
 
-            num_units: Hyperparameter object
-                Number of nodes by layer.
+                deep: Hyperparameter object
+                    Number of layers.
+                num_units: Hyperparameter object
+                    Number of nodes by layer.
+                batch_size: Hyperparameter object
+                    Batch size.
+                learning_rate: Hyperparameter object
+                    Learning rate for Adam optimizer.
 
-            batch_size: Hyperparameter object
-                Batch size.
+                epochs: Hyperparameter object
+                    Number of epochs for training.
 
-            learning_rate: Hyperparameter object
-                Learning rate for Adam optimizer.
+                act_fn: Hyperparameter object
+                    Activation function for the hidden layers.
 
-            epochs: Hyperparameter object
-                Number of epochs for training.
+                last_act_fn: Hyperparameter object
+                    Activation function for the last layer.
 
-            act_fn: Hyperparameter object
-                Activation function for the hidden layers.
-
-            last_act_fn: Hyperparameter object
-                Activation function for the last layer.
-
-            loss_fn: Hyperparameter object
-                Loss function.
+                loss_fn: Hyperparameter object
+                    Loss function.
 
         """
         self.neural_library = kwargs.pop('neural_library', 'keras')
@@ -360,42 +358,47 @@ class Nnogada:
                 print(logbook.stream)
 
         return population, logbook
-
     def ga_with_elitism(self, population_size, max_generations, gene_length, k,
                         pmutation=0.5, pcrossover=0.5, hof=1):
         """
-        Simple genetic algorithm with elitism.
+            Simple genetic algorithm with elitism.
 
-        Parameters:
-        ------------
+            Parameters
+            -----------
+            population_size : int
+                Population size.
+            max_generations : int
+                Maximum number of generations.
+            gene_length : int
+                Length of each gene.
+            k : int
+                k parameter for the tournament selection method
+            pmutation : float
+                Probability of mutation, between 0 and 1.
+            pcrossover : float
+                Probability of crossover, between 0 and 1.
+            hof : int
+                Number of individuals to stay in the hall of fame.
 
-        population_size: int
-            Population size.
-
-        max_generations: int
-            Maximum number of generations.
-
-        gene_length: int
-            Length of each gene.
-
-        k: int
-            K parameter for the tournament selection method.
-
-        pmutation: float
-            Probability of mutation (0<pmutation<1)
-
-        pcrossover: float
-            Probability of crossover (0<pcrossover<1)
-
-        hof: int
-            Number of individuals to stay in the hall of fame. It determines
-            the elitism performance.
-
-        Returns
-        ---------
-        best_population : list
-            Individuals in the last population.
+            Returns
+            -------
+            best_population : list
+                Individuals in the last population.
         """
+        # """
+        #
+        #
+        # Parameters:
+        # ------------
+        #
+        #
+        # Returns
+        # ---------
+        # best_population : list
+        #     Individuals in the last population.
+        #
+        # """
+        
         # Genetic Algorithm constants:
         P_CROSSOVER = pcrossover  # probability for crossover
         P_MUTATION = pmutation  # probability for mutating an individual
@@ -478,10 +481,13 @@ class LoadDataSet:
         return self.X[i], self.y[i]
 
 class MLP(nn.Module):
+    """
+    Multilayer Perceptron class for regression.
+    """
     def __init__(self, ncols, noutput, numneurons=200,
                  numlayers=3, dropout=0.5):
         """
-        Multilayer Perceptron class for regression.
+        Initialization method.
 
         Parameters
         ----------
@@ -537,6 +543,7 @@ class MLP(nn.Module):
         Parameters
         ----------
         m : MLP class.
+            Multilayer perceptron model.
         """
         if type(m) == nn.Linear:
             nn.init.xavier_normal_(m.weight)
