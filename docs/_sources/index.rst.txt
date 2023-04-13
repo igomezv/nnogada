@@ -36,7 +36,13 @@ Please read the `introduction <intro.html>`_ section where you can see the `requ
 
 For ``nnogada`` citation, please go to the `citation  section <Citation.html#cite-external-codes>`_.
 
-![](https://raw.githubusercontent.com/igomezv/igomezv.github.io/master/assets/img/nnogada_output.png)
+Flow:
+
+.. figure:: img/geneticalg.png
+
+Output:
+
+.. figure:: img/nnogada_output.png
 
 
 Extended index
