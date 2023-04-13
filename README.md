@@ -8,7 +8,7 @@ Before use the code, please install the requirements:
 
     $ pip3 install -r requiriments.txt
  
-Or you can try install nnogada in your computer:
+Or you can try to install nnogada in your computer:
 
      $ git clone https://github.com/igomezv/nnogada
 
@@ -41,4 +41,3 @@ Contributions are welcome!
 
 - Include convolutional, recurrent neural networks and other architectures.
 - To allow pytorch models for classification.
-- Upload to pypy.
