@@ -27,6 +27,8 @@ If you use the code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., &
 
 Contributions are welcome!
 
+![](https://raw.githubusercontent.com/igomezv/igomezv.github.io/master/assets/img/nnogada_output.png)
+
 ## Description of this repository
 
 - nnogada folder has the source code of the neural approximator with genetic algorithms.
