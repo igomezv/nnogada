@@ -16,7 +16,7 @@ Or you can try to install nnogada in your computer:
 
      $ pip3 install -e .
 
-then you can delete the cloned repo because you must have simplemc installed locally.
+then you can delete the cloned repo because you must have nnogada installed locally.
 
 Other way to install nnogada (without clonning) is:
 
