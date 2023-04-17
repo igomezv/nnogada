@@ -4,19 +4,15 @@ nnogada
 
 This is the ``nnogada`` documentation, a Python package for the hyperparameter tuning for feedforward neural networks implemented by ``keras`` or ``torch``. 
 
-There are 4 options to install, or use, ``nnogada``: 
+There are some options to install, or use, ``nnogada``: 
 
-1) ``pip3 install nnogada``.
-
-2) If you have problem with pypy, you can install ``nnogada`` without clonning: 
+1) We recommend to install ``nnogada`` without clonning in the following way: 
 
    .. code-block:: bash
       
         pip3 install -e git+https://github.com/igomezv/Nnogada#egg=nnogada
 
-2) You can use ``nnogada`` in Google Colab, please see the Section `Using Google Colab in Requirements <requirements.html#using-google-colab>`_.
-
-3) On the other hand, you can visit the `GitHub code repository <https://github.com/igomezv/Nnogada.git>`_, download the `source code here <https://github.com/igomezv/Nnogada/archive/refs/heads/master.zip>`_ or clone it as follows:
+2) On the other hand, you can visit the `GitHub code repository <https://github.com/igomezv/Nnogada.git>`_, download the `source code here <https://github.com/igomezv/Nnogada/archive/refs/heads/master.zip>`_ or clone it as follows:
 
    .. code-block:: bash
 
@@ -30,7 +26,10 @@ Then, you can install it:
       
       pip3 install -e .
 
-  
+3) You can use ``nnogada`` in Google Colab, please see the Section `Using Google Colab in Requirements <requirements.html#using-google-colab>`_.
+
+4) ``pip3 install nnogada`` sometimes fails.
+
 Please read the `introduction <intro.html>`_ section where you can see the `requirements <intro.html#requirements>`_  and a simple `quick start <intro.html#quick-start>`_. 
 
 

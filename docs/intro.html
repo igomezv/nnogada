@@ -77,9 +77,9 @@
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">nnogada.Nnogada</span> <span class="kn">import</span> <span class="n">Nnogada</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/jla.csv&#39;</span><span class="p">)</span>
@@ -124,8 +124,8 @@
 
 <span class="c1"># best solution</span>
 <span class="n">best_population</span> <span class="o">=</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">ga_with_elitism</span><span class="p">(</span><span class="n">population_size</span><span class="p">,</span> <span class="n">max_generations</span><span class="p">,</span> <span class="n">gene_length</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">best_population</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Total elapsed time:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;minutes&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">best_population</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total elapsed time:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;minutes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -133,9 +133,9 @@
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">nnogada.Nnogada</span> <span class="kn">import</span> <span class="n">Nnogada</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/jla.csv&#39;</span><span class="p">)</span>
@@ -180,11 +180,11 @@
 <span class="c1"># Find best solutions</span>
 <span class="n">net_fit</span><span class="o">.</span><span class="n">ga_with_elitism</span><span class="p">(</span><span class="n">population_size</span><span class="p">,</span> <span class="n">max_generations</span><span class="p">,</span> <span class="n">gene_length</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 <span class="c1"># best solution</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;best individual&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best number of nodes:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;num_units&#39;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best number of layers:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;deep&#39;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best number of batch_size:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;batch_size&#39;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Total elapsed time:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;minutes&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;best individual&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best number of nodes:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;num_units&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best number of layers:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;deep&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best number of batch_size:&quot;</span><span class="p">,</span> <span class="n">net_fit</span><span class="o">.</span><span class="n">best</span><span class="p">[</span><span class="s1">&#39;batch_size&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total elapsed time:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;minutes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
