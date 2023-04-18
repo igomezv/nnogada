@@ -3,21 +3,20 @@ title: 'nnogada: neural networks optimized by genetic algorithms for data analys
 tags:
   - Python
   - cosmology
-  - regression
   - neural networks
+  - hyperparameter tuning
+  - genetic algorithms
 authors:
   - name: Isidro Gómez-Vargas
     orcid: 0000-0002-6473-018X
-    equal-contrib: true
-    corresponding: true #
+    corresponding: true 
     affiliation: 1
-  - name: José Alberto Vázquez
+  - name: José A. Vázquez
+    orcid: 0000-0002-7401-0864
     affiliation: 1
 affiliations:
- - name: Instituto de Ciencias Físicas, Universidad Nacional Autónoma de México
-   orcid: 0000-0002-7401-0864
-   index: 1
-
+  - name: Instituto de Ciencias Físicas, Universidad Nacional Autónoma de México
+    index: 1
 date: 18 April 2023
 bibliography: paper.bib
 
