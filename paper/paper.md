@@ -7,7 +7,7 @@ tags:
   - neural networks
 authors:
   - name: Isidro Gómez-Vargas
-    orcid:0000-0002-6473-018X
+    orcid: 0000-0002-6473-018X
     equal-contrib: true
     corresponding: true #
     affiliation: 1
@@ -15,7 +15,7 @@ authors:
     affiliation: 1
 affiliations:
  - name: Instituto de Ciencias Físicas, Universidad Nacional Autónoma de México
-   orcid:0000-0002-7401-0864
+   orcid: 0000-0002-7401-0864
    index: 1
 
 date: 18 April 2023
