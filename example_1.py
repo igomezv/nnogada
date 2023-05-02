@@ -62,10 +62,10 @@ t = time.time()
 datos = []
 
 # Define the hyperparameters for the search
-hyperparams = {'deep': [1,2,3,4], 'num_units': [1,5,10, 20], 'batch_size': [1,64,128, 256]}
+hyperparams = {'deep': [1,2], 'num_units': [1,5], 'batch_size': [128, 256]}
 
 # generate a Nnogada instance
-net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
+net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val, regression=False)
 # Set the possible values of hyperparameters and not use the default values from hyperparameters.py
 net_fit.set_hyperparameters()
 
