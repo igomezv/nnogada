@@ -11,6 +11,7 @@ from torchinfo import summary
 import torch.nn.functional as F
 from torch_optimizer import AdaBound
 import tensorflow as tf
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from nnogada.hyperparameters import *
 from tqdm import tqdm
 
@@ -75,10 +76,9 @@ class Nnogada:
         """
         self.neural_library = kwargs.pop('neural_library', 'keras')
         if self.neural_library == 'keras' or self.neural_library == 'tensorflow':
-            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
             print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-            os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-            os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+            # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
+            # os.environ["CUDA_VISIBLE_DEVICES"] = ""
         else:
             import torch
             # setting device on GPU if available, else CPU
