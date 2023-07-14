@@ -3,17 +3,15 @@ from scipy.stats import bernoulli
 import sys
 from bitstring import BitArray
 import time
-import tensorflow as tf
-import torch
+import os
+import pandas as pd
+from astroNN.nn.layers import MCDropout
 from torch import nn
 from torchinfo import summary
-from astroNN.nn.layers import MCDropout
-from torch_optimizer import AdaBound
 import torch.nn.functional as F
-
-import pandas as pd
+from torch_optimizer import AdaBound
+import tensorflow as tf
 from nnogada.hyperparameters import *
-
 from tqdm import tqdm
 
 class Nnogada:
@@ -76,22 +74,16 @@ class Nnogada:
 
         """
         self.neural_library = kwargs.pop('neural_library', 'keras')
-        if self.neural_library == 'keras':
+        if self.neural_library == 'keras' or self.neural_library == 'tensorflow':
+            os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
             print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-            import os
             os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
             os.environ["CUDA_VISIBLE_DEVICES"] = "0"
         else:
+            import torch
             # setting device on GPU if available, else CPU
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-            print('Using device:', device)
-            print()
-            # Additional Info when using cuda
-            if device.type == 'cuda':
-                print(torch.cuda.get_device_name(0))
-                print('Memory Usage:')
-                print('Allocated:', round(torch.cuda.memory_allocated(0) / 1024 ** 3, 1), 'GB')
-                print('Cached:   ', round(torch.cuda.memory_reserved(0) / 1024 ** 3, 1), 'GB')
+            print('Using torch. Using device:', device)
 
         self.deep = kwargs.pop('deep', deep)
         self.num_units = kwargs.pop('num_units', num_units)
@@ -237,6 +229,7 @@ class Nnogada:
             # it needs pytorch utilities
             if self.verbose:
                 summary(self.model)
+            self.clear_gpu()
             # Run the training loop
             history_train = np.empty((1,))
             history_val = np.empty((1,))
@@ -285,6 +278,7 @@ class Nnogada:
             if self.verbose:
                 print('\nTraining process has finished in {:.2f} minutes.'.format(t / 60))
                 print("-------------------------------------------------\n")
+            self.clear_gpu()
             # history = {'loss': history_train, 'val_loss': history_val}
             self.loss_val = history_val[-5:]
             self.loss_train = history_train[-5:]
@@ -461,7 +455,6 @@ class Nnogada:
         self.best = self.history.iloc[0]
 
         return best_population
-
 
 # for torch nets
 class LoadDataSet:
