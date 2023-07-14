@@ -103,6 +103,7 @@ class Nnogada:
 
         self.history = []
         self.best = None
+
     def set_hyperparameters(self):
         """
         This small routine sets as variable the hyperparameters
@@ -183,6 +184,7 @@ class Nnogada:
             # print(results)
             self.history.append(hyp_vary_list+[loss, score, t])
             return loss,
+
         elif self.neural_library == 'torch':
             batch_size = int(self.batch_size.val)
             # Initialize the MLP
@@ -358,6 +360,7 @@ class Nnogada:
                 print(logbook.stream)
 
         return population, logbook
+
     def ga_with_elitism(self, population_size, max_generations, gene_length, k,
                         pmutation=0.5, pcrossover=0.5, hof=1):
         """
@@ -454,6 +457,7 @@ class Nnogada:
 
         return best_population
 
+
 # for torch nets
 class LoadDataSet:
     def __init__(self, X, y, scale_data=False):
@@ -479,6 +483,7 @@ class LoadDataSet:
         return len(self.X)
     def __getitem__(self, i):
         return self.X[i], self.y[i]
+
 
 class MLP(nn.Module):
     """
@@ -518,6 +523,7 @@ class MLP(nn.Module):
             l.append(a_hidden)
         l.append(l_output)
         self.module_list = nn.ModuleList(l)
+
     def forward(self, x):
         """
         Forward method using activation function and other functions defined in the torch architecture.
@@ -536,6 +542,7 @@ class MLP(nn.Module):
         for f in self.module_list:
             x = f(x)
         return x
+
     def init_weights(self, m):
         """
         Initilization of the ANN weights.
