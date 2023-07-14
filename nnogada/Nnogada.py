@@ -159,6 +159,18 @@ class Nnogada:
         if self.verbose:
             print("\n-------------------------------------------------")
         if self.neural_library == 'keras':
+            print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+            gpus = tf.config.list_physical_devices('GPU')
+            # if gpus:
+            #     # Restrict TensorFlow to only use the first GPU
+            #     try:
+            #         tf.config.set_visible_devices(gpus[0], 'GPU')
+            #         logical_gpus = tf.config.list_logical_devices('GPU')
+            #         print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPU")
+            #     except RuntimeError as e:
+            #         # Visible devices must be set before GPUs have been initialized
+            #         print(e)
+
             # Train model and predict on validation set
             model = tf.keras.Sequential()
             model.add(tf.keras.layers.Dense(self.num_units.val, input_shape=(int(self.X_train.shape[1]),)))
@@ -169,7 +181,8 @@ class Nnogada:
             # model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=tf.nn.softmax))
             model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=self.last_act_fn.val))
 
-            optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+            optimizer = tf.keras.optimizers.legacy.Adam(learning_rate=self.learning_rate.val, beta_1=0.9, beta_2=0.999, epsilon=1e-3)
+            # from tensorflow.keras.optimizers.legacy import Adam
             model.compile(optimizer=optimizer, loss=self.loss_fn.val, metrics=[self.metric])
             model.fit(self.X_train, self.Y_train, epochs=self.epochs.val, validation_data=(self.X_val, self.Y_val),
                       callbacks=None, batch_size=self.batch_size.val, shuffle=1, verbose=int(self.verbose))
