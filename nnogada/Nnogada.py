@@ -7,6 +7,7 @@ import tensorflow as tf
 import torch
 from torch import nn
 from torchinfo import summary
+from astroNN.nn.layers import MCDropout
 from torch_optimizer import AdaBound
 import torch.nn.functional as F
 
@@ -20,7 +21,7 @@ class Nnogada:
     Main class for nnogada.
     """
     def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val,
-                 regression=True, verbose=False,
+                 regression=True, verbose=False, mcdropout=False, dropout=None,
                  **kwargs):
         """
         Initialization of Nnogada class.
@@ -75,6 +76,23 @@ class Nnogada:
 
         """
         self.neural_library = kwargs.pop('neural_library', 'keras')
+        if self.neural_library == 'keras':
+            print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+            import os
+            os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
+            os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        else:
+            # setting device on GPU if available, else CPU
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            print('Using device:', device)
+            print()
+            # Additional Info when using cuda
+            if device.type == 'cuda':
+                print(torch.cuda.get_device_name(0))
+                print('Memory Usage:')
+                print('Allocated:', round(torch.cuda.memory_allocated(0) / 1024 ** 3, 1), 'GB')
+                print('Cached:   ', round(torch.cuda.memory_reserved(0) / 1024 ** 3, 1), 'GB')
+
         self.deep = kwargs.pop('deep', deep)
         self.num_units = kwargs.pop('num_units', num_units)
         self.batch_size = kwargs.pop('batch_size', batch_size)
@@ -83,7 +101,9 @@ class Nnogada:
         self.act_fn = kwargs.pop('act_fn', act_fn)
         self.last_act_fn = kwargs.pop('last_act_fn', last_act_fn)
         self.loss_fn = kwargs.pop('loss_fn', loss_fn)
-
+        self.dropout = dropout
+        self.mcdropout = mcdropout
+        print("EPOCHS:", self.epochs.val)
         self.all_hyp_list = [self.deep, self.num_units, self.batch_size, self.learning_rate,
                              self.epochs, self.act_fn, self.last_act_fn, self.loss_fn]
 
@@ -159,25 +179,16 @@ class Nnogada:
         if self.verbose:
             print("\n-------------------------------------------------")
         if self.neural_library == 'keras':
-            print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-            gpus = tf.config.list_physical_devices('GPU')
-            # if gpus:
-            #     # Restrict TensorFlow to only use the first GPU
-            #     try:
-            #         tf.config.set_visible_devices(gpus[0], 'GPU')
-            #         logical_gpus = tf.config.list_logical_devices('GPU')
-            #         print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPU")
-            #     except RuntimeError as e:
-            #         # Visible devices must be set before GPUs have been initialized
-            #         print(e)
-
             # Train model and predict on validation set
             model = tf.keras.Sequential()
             model.add(tf.keras.layers.Dense(self.num_units.val, input_shape=(int(self.X_train.shape[1]),)))
 
             for i in range(self.deep.val):
                 model.add(tf.keras.layers.Dense(self.num_units.val, activation=self.act_fn.val))
-            #             model.add(keras.layers.Dropout(0.3))
+                if self.mcdropout:
+                    model.add(MCDropout(0.5))
+                if self.dropout:
+                        model.add(tf.keras.layers.Dropout(0.3))
             # model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=tf.nn.softmax))
             model.add(tf.keras.layers.Dense(int(self.Y_train.shape[1]), activation=self.last_act_fn.val))
 
@@ -240,18 +251,14 @@ class Nnogada:
                     targets = targets.reshape((targets.shape[0], targets.shape[1]))
                     # Zero the gradients
                     optimizer.zero_grad()
-
                     # Perform forward pass
                     outputs = self.model(inputs)
-
                     # Compute loss
                     loss = loss_function(outputs, targets)
                     # Perform backward pass
                     loss.backward()
-
                     # Perform optimization
                     optimizer.step()
-
                     # Print statistics
                     current_loss += loss.item()
                     if i % 10 == 0:
@@ -265,7 +272,6 @@ class Nnogada:
                     inputs, targets = data
                     inputs, targets = inputs.float(), targets.float()
                     targets = targets.reshape((targets.shape[0], targets.shape[1]))
-
                     output_val = self.model(inputs)
                     valid_loss = loss_function(output_val, targets)
                     valid_loss += loss.item()
@@ -401,20 +407,6 @@ class Nnogada:
             best_population : list
                 Individuals in the last population.
         """
-        # """
-        #
-        #
-        # Parameters:
-        # ------------
-        #
-        #
-        # Returns
-        # ---------
-        # best_population : list
-        #     Individuals in the last population.
-        #
-        # """
-        
         # Genetic Algorithm constants:
         P_CROSSOVER = pcrossover  # probability for crossover
         P_MUTATION = pmutation  # probability for mutating an individual
