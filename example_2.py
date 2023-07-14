@@ -1,6 +1,7 @@
 ## Regression example with keras
 import time
 from nnogada.Nnogada import Nnogada
+from nnogada.hyperparameters import *
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import numpy as np
@@ -39,10 +40,13 @@ t = time.time()
 datos = []
 
 # Define the hyperparameters for the search
-hyperparams = {'deep': [1, 2], 'num_units': [1,2], 'batch_size': [256,1048]}
+hyperparams = {'deep': [1, 2], 'num_units': [1, 2], 'batch_size': [256, 1048]}
+# Define hyperparameters fixed (different values of nnogada.hyperparameters that are the default)
+epochs.val = 50
 
 # generate a Nnogada instance
-net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val)
+net_fit = Nnogada(hyp_to_find=hyperparams, X_train=X_train, Y_train=Y_train, X_val=X_val, Y_val=Y_val, regression=True,
+                  epochs=epochs)
 # Set the possible values of hyperparameters and not use the default values from hyperparameters.py
 net_fit.set_hyperparameters()
 
