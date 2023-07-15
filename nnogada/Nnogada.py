@@ -6,6 +6,7 @@ import time
 import os
 import pandas as pd
 from astroNN.nn.layers import MCDropout
+import torch
 from torch import nn
 from torchinfo import summary
 import torch.nn.functional as F
@@ -20,7 +21,7 @@ class Nnogada:
     Main class for nnogada.
     """
     def __init__(self, hyp_to_find, X_train, Y_train, X_val, Y_val,
-                 regression=True, verbose=False, mcdropout=False, dropout=None,
+                 regression=True, verbose=False, mcdropout=False, dropout=None, usegpu=False,
                  **kwargs):
         """
         Initialization of Nnogada class.
@@ -76,13 +77,19 @@ class Nnogada:
         """
         self.neural_library = kwargs.pop('neural_library', 'keras')
         if self.neural_library == 'keras' or self.neural_library == 'tensorflow':
-            print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-            # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-            # os.environ["CUDA_VISIBLE_DEVICES"] = ""
+            if usegpu:
+                os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+                print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+                os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
+            else:
+                print("Using CPU")
+                os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
         else:
-            import torch
             # setting device on GPU if available, else CPU
-            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            if usegpu:
+                device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            else:
+                device = torch.device('cpu')
             print('Using torch. Using device:', device)
 
         self.deep = kwargs.pop('deep', deep)
@@ -95,7 +102,6 @@ class Nnogada:
         self.loss_fn = kwargs.pop('loss_fn', loss_fn)
         self.dropout = dropout
         self.mcdropout = mcdropout
-        print("EPOCHS:", self.epochs.val)
         self.all_hyp_list = [self.deep, self.num_units, self.batch_size, self.learning_rate,
                              self.epochs, self.act_fn, self.last_act_fn, self.loss_fn]
 
@@ -229,7 +235,6 @@ class Nnogada:
             # it needs pytorch utilities
             if self.verbose:
                 summary(self.model)
-            self.clear_gpu()
             # Run the training loop
             history_train = np.empty((1,))
             history_val = np.empty((1,))
@@ -278,7 +283,6 @@ class Nnogada:
             if self.verbose:
                 print('\nTraining process has finished in {:.2f} minutes.'.format(t / 60))
                 print("-------------------------------------------------\n")
-            self.clear_gpu()
             # history = {'loss': history_train, 'val_loss': history_val}
             self.loss_val = history_val[-5:]
             self.loss_train = history_train[-5:]
