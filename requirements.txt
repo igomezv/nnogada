@@ -7,7 +7,7 @@ scipy
 pandas
 requests
 bitstring
-tensorflow~=2.7.1
+tensorflow
 torch
 torchinfo
 torch_optimizer
