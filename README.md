@@ -1,5 +1,7 @@
 Neural Networks Optimized by Genetic Algorithms for Data Analysis (NNOGADA) 
 
+INFO:
+
 **nnogada** is a Python package that performs hyperparemeter tuning for artificial neural networks, particularly for Multi Layer Perceptrons, using simple genetic algorithms. Useful for generate better neural network models for data analysis. Currently, only works with feedforward neural networks in tensorflow.keras (classification and regression) and torch (regression at this moment).
 
 You can try to install nnogada in your computer:
