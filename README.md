@@ -20,5 +20,7 @@ Other way to install nnogada (without clonning) is:
 
 If you use the code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*
 
+**Note**: Torch seems to have better performance on a laptop GPU in linux.
+
 Contributions are welcome!
 
