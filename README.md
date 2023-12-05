@@ -25,4 +25,4 @@ If you use the code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., &
 Contributions are welcome!
 
 TODO:
-- To include other architectures such as conv and reccurrent nets.
+- To include other architectures such as convolutional and reccurrent nets.
