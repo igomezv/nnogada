@@ -1,6 +1,6 @@
 Neural Networks Optimized by Genetic Algorithms for Data Analysis (NNOGADA) 
 
-[![PyPI version](https://badge.fury.io/py/nnogada.svg)](https://badge.fury.io/py/nnogada) [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![Documentation Status](https://readthedocs.org/projects/nnogada/badge/?version=latest)](https://nnogada.readthedocs.io/en/latest/?badge=latest) [![arXiv](https://img.shields.io/badge/arXiv:2311.05699v3-f9f107.svg)](https://arxiv.org/pdf/2311.05699.pdf) 
+[![PyPI version](https://badge.fury.io/py/nnogada.svg)](https://badge.fury.io/py/nnogada) [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![arXiv](https://img.shields.io/badge/arXiv:2311.05699v3-f9f107.svg)](https://arxiv.org/pdf/2311.05699.pdf) 
 
 If you find useful this code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*
 
