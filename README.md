@@ -2,7 +2,6 @@ Neural Networks Optimized by Genetic Algorithms for Data Analysis (NNOGADA)
 
 [![PyPI version](https://badge.fury.io/py/nnogada.svg)](https://badge.fury.io/py/nnogada)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) 
-[![arXiv](https://img.shields.io/badge/arXiv:2311.05699v3-f9f107.svg)](https://arxiv.org/pdf/2311.05699.pdf) 
 [![arXiv](https://img.shields.io/badge/arXiv-2311.05699-b31b1b.svg)](https://arxiv.org/abs/2311.05699)
 [![GitHub Repo stars](https://img.shields.io/github/stars/igomezv/nnogada?style=social)](https://github.com/igomezv/nnogada)
 
