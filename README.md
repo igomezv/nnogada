@@ -6,7 +6,10 @@ Neural Networks Optimized by Genetic Algorithms for Data Analysis (NNOGADA)
 [![GitHub Repo stars](https://img.shields.io/github/stars/igomezv/nnogada?style=social)](https://github.com/igomezv/nnogada)
 
 
-If you find useful this code, please cite the paper *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*
+If you find useful this code, please cite the paper:
+
+     *Gómez-Vargas, I., Andrade, J. B., & Vázquez, J. A. (2023). Neural networks optimized by genetic algorithms in cosmology. Physical Review D, 107(4), 043509.*
+     
 
 **nnogada** is a Python package that performs hyperparemeter tuning for artificial neural networks, particularly for Multi Layer Perceptrons, using simple genetic algorithms. Useful for generate better neural network models for data analysis. Currently, only works with feedforward neural networks in tensorflow.keras (classification and regression) and torch (regression at this moment).
 
