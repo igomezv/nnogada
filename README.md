@@ -64,7 +64,7 @@ Contributions to **NNOGADA** are very welcome! If you have suggestions for impro
 - **docs/**: Documentation files. Use `docs_sphinx` for the latest Sphinx documentation.
 - **nnogada/**: Core library files.
 - **outputs/**: Model output and logs.
-- **examples/**: Example scripts to demonstrate library usage.
+- **examples files**: Example scripts to demonstrate library usage.
 - **requirements.txt**: List of package dependencies.
 - **setup.py**, **setup.cfg**: Packaging and installation scripts.
 
