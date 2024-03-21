@@ -7,6 +7,10 @@
 
 **NNOGADA** is a Python package designed to optimize hyperparameters for artificial neural networks, specifically for Multi-Layer Perceptrons (MLP), through simple genetic algorithms. It is particularly effective in generating improved neural network models for data analysis, with current support for feedforward neural networks in tensorflow.keras (for both classification and regression) and torch (currently supporting regression).
 
+## Documentation
+
+For an introduction and API documentation, visit [NNOGADA Documentation](https://igomezv.github.io/nnogada).
+
 ## Installation
 
 You can install **NNOGADA** directly from the source or via pip. To install from the source:
