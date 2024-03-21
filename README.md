@@ -9,7 +9,7 @@
 
 ## Documentation
 
-For an introduction and API documentation, visit [NNOGADA Documentation](https://igomezv.github.io/nnogada).
+For an introduction and API documentation, visit [NNOGADA Docs](https://igomezv.github.io/nnogada).
 
 ## Installation
 
