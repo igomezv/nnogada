@@ -46,7 +46,8 @@ If you find **NNOGADA** useful in your research, please consider citing our pape
   publisher={American Physical Society},
   doi={10.48550/arXiv.2209.02685},
   url={https://doi.org/10.48550/arXiv.2209.02685}
-}```
+}
+```
 
 
 ## Contributions
