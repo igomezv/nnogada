@@ -74,5 +74,5 @@ Contributions to **NNOGADA** are very welcome! If you have suggestions for impro
 
 ## License
 
-NNOGADA is licensed under the GPL v2 license. See the [LICENSE](LICENSE) file for more details.
+NNOGADA is licensed under the MIT license. See the [LICENSE](LICENSE) file for more details.
 
