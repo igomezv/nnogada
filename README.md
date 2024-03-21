@@ -36,7 +36,7 @@ pip3 install -e git+https://github.com/igomezv/nnogada#egg=nnogada
 
 ## Citing NNOGADA
 
-If you find **NNOGADA** useful in your research, please consider citing [our paper](https://doi.org/10.1103/PhysRevD.107.043509):
+If you find **NNOGADA** useful in your research, please consider citing [our paper](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.107.043509):
 
 ```bibtex
 @article{GomezVargas2023,
