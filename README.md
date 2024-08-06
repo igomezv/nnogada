@@ -60,7 +60,7 @@ Contributions to **`nnogada`** are very welcome! If you have suggestions for imp
 
 ## TODO
 
-- [ ] Include support for other neural network architectures such as Convolutional Neural Networks (CNNs) and Variational Autoencoders (VAEs)).
+- [ ] To include support for other neural network architectures such as Convolutional Neural Networks (CNNs) and Variational Autoencoders (VAEs).
 
 ## Project Structure
 
