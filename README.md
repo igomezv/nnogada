@@ -76,3 +76,9 @@ Contributions to **`nnogada`** are very welcome! If you have suggestions for imp
 
 NNOGADA is licensed under the MIT license. See the [LICENSE](LICENSE) file for more details.
 
+## Research works that use **`nnogada`**:
+
+- Mitra, A., Gómez-Vargas, I., & Zarikas, V. (2024). Dark energy reconstruction analysis with artificial neural networks: Application on simulated Supernova Ia data from Rubin Observatory. Physics of the Dark Universe, 46, 101706.
+- Gómez-Vargas, I., & Vázquez, J. A. (2024). Deep Learning and genetic algorithms for cosmological Bayesian inference speed-up. Physical Review D, 110(8), 083518.
+- Garcia-Arroyo, G., Gómez-Vargas, I., & Vázquez, J. A. (2024). Reconstructing rotation curves with artificial neural networks. arXiv preprint arXiv:2404.05833.
+
