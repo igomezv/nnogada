@@ -4,7 +4,6 @@
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![arXiv](https://img.shields.io/badge/arXiv-2209.02685-b31b1b.svg)](https://doi.org/10.48550/arXiv.2209.02685)
 [![GitHub Repo stars](https://img.shields.io/github/stars/igomezv/nnogada?style=social)](https://github.com/igomezv/nnogada)
-![Visitor count](https://shields-io-visitor-counter.herokuapp.com/badge?page=igomezv.nnogada)
 
 **`NNOGADA`** is a Python package designed to optimize hyperparameters for artificial neural networks, specifically for Multi-Layer Perceptrons (MLP), through simple genetic algorithms. It is particularly effective in generating improved neural network models for data analysis, with current support for feedforward neural networks in tensorflow.keras (for both classification and regression) and torch (currently supporting regression).
 
